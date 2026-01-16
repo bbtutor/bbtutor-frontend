@@ -12,7 +12,7 @@ export const metadata: Metadata = {
   description: "BB Tutors official website",
   icons: {
     // Todo: Change this to the actual logo
-    // ANCHOR: 
+
     icon: "/vercel.svg",
   },
 };
