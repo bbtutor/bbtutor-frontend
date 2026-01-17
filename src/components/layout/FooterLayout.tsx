@@ -1,5 +1,5 @@
 import Image from "next/image";
-import HeaderLink from "./HeaderLinks";
+
 import Link from "next/link";
 
 /**
