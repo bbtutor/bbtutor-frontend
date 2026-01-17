@@ -3,5 +3,6 @@
 
 @theme inline {
   --color-Black-fonts-headings: rgba(45, 46, 46, 1);
-  --color-blue: rgba(0, 26, 131, 1);
+  --color-black: rgba(32, 33, 34, 1);
+  --color-primary: rgba(0, 26, 131, 1);
 }

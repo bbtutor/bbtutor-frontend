@@ -22,11 +22,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${poppins.className} antialiased min-h-screen flex flex-col max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 w-full`}
-      >
+      <body className={`${poppins.className} antialiased min-h-screen w-full`}>
         <HeaderLayout />
-        <main className="flex-1 w-full min-h-screen">{children}</main>
+        <main className="min-h-screen">{children}</main>
         <FooterLayout />
       </body>
     </html>

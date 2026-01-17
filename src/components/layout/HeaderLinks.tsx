@@ -13,7 +13,7 @@ const HeaderLink = ({ href, children }: HeaderLinkProps) => {
   return (
     <Link
       href={href}
-      className={`font-semibold text-xs sm:text-sm md:text-base leading-4 sm:leading-5 md:leading-6 text-Black-fonts-headings hover:text-blue transition-colors delay-200 cursor-pointer ${pathName === href ? "text-blue underline decoration-2 underline-offset-4" : ""}`}
+      className={`font-semibold text-xs sm:text-sm md:text-base leading-4 sm:leading-5 md:leading-6 text-Black-fonts-headings hover:text-primary transition-colors delay-200 cursor-pointer ${pathName === href ? "text-primary underline decoration-2 underline-offset-4" : ""}`}
     >
       {children}
     </Link>

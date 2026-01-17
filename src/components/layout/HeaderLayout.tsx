@@ -29,7 +29,7 @@ function HeaderLayout() {
   return (
     <header
       ref={headerRef}
-      className="sticky top-0 z-40 h-16 sm:h-20 lg:h-24 flex items-center justify-between bg-white"
+      className="sticky top-0 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 z-40 h-16 sm:h-20 lg:h-24 flex items-center justify-between bg-white"
     >
       <Image
         alt="Logo image"
@@ -83,7 +83,7 @@ function HeaderLayout() {
             </div>
             <button
               onClick={() => setIsMenuOpen(false)}
-              className="absolute top-4 right-4 p-2 text-Black-fonts-headings hover:text-blue"
+              className="absolute top-4 right-4 p-2 text-Black-fonts-headings hover:text-primary"
               aria-label="Close menu"
             >
               <svg
