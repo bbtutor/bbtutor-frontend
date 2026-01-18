@@ -1,8 +1,12 @@
+"use client";
 import Image from "next/image";
 import { Button } from "../ui/button";
+import { useRouter } from "next/navigation";
 
 function Hero() {
   // TODO: Fix he alignment of the master text and the underline image
+
+  const router = useRouter();
   return (
     <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 min-h-[704.53px] gradient-bg flex flex-col lg:flex-row items-center justify-between gap-8 lg:gap-20 py-8 lg:py-0">
       <div className="basis-full lg:basis-[55%] text-left lg:text-left">
@@ -31,9 +35,20 @@ function Hero() {
 
         <div className="flex flex-col sm:flex-row gap-4 lg:gap-8 text-lg justify-start lg:justify-start">
           {/* Buttons */}
-          <Button className="bg-yellow">Book a Lesson</Button>
-          <Button className="" variant="outline">
-            Whatsapp Us
+          <Button
+            onClick={() => router.push("/book-a-lesson")}
+            className="bg-yellow"
+          >
+            Book a Lesson
+          </Button>
+          <Button className="" variant="outline" asChild>
+            <a
+              href="https://wa.me/2348064982027"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Whatsapp Us
+            </a>
           </Button>
         </div>
       </div>
