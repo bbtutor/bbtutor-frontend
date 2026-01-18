@@ -6,6 +6,7 @@
   --color-black: rgba(32, 33, 34, 1);
   --color-primary: rgba(0, 26, 131, 1);
   --color-yellow: rgba(250, 204, 21, 1);
+  --color-blue-gray: rgba(226, 232, 240, 1);
 }
 
 .gradient-bg {
@@ -15,4 +16,13 @@
     #d0e4f4 97.41%,
     #001a83 155.35%
   );
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
 }
