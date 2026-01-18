@@ -33,7 +33,7 @@ function FooterLayout() {
               Courses
             </Link>
             <Link
-              href="/book-a-lesson"
+              href="/book_a_tutor"
               className="hover:text-primary transition-colors"
             >
               Book a Tutor

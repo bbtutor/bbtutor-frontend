@@ -4,6 +4,8 @@ import WhyBB from "@/components/home/WhyBB";
 import RealResult from "@/components/home/RealResult";
 import HowItWork from "@/components/home/HowItWork";
 import Faq from "@/components/home/Faq";
+import TeachingMethod from "@/components/home/TeachingMethod";
+import ReadyTo from "@/components/home/ReadyTo";
 
 function Home() {
   return (
@@ -14,6 +16,8 @@ function Home() {
       <RealResult />
       <HowItWork />
       <Faq />
+      <TeachingMethod />
+      <ReadyTo />
     </section>
   );
 }

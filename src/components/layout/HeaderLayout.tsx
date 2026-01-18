@@ -69,9 +69,9 @@ function HeaderLayout() {
         <ul className="flex justify-between gap-1 sm:gap-2 md:gap-3 lg:gap-5 items-center">
           <HeaderLink href="/">Home</HeaderLink>
           <HeaderLink href="/about">About us</HeaderLink>
-          <HeaderLink href="/video-lesson">Video Lesson</HeaderLink>
-          <HeaderLink href="/video-lesson">Book a Lesson</HeaderLink>
-          <HeaderLink href="/become-a-tutor">Become a Tutor</HeaderLink>
+          <HeaderLink href="/video_lesson">Video Lesson</HeaderLink>
+          <HeaderLink href="/video_lesson">Book a Lesson</HeaderLink>
+          <HeaderLink href="/become_a_tutor">Become a Tutor</HeaderLink>
         </ul>
       </nav>
 
