@@ -1,11 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
 
-/**
- * base container class for footer
- * max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16
- */
-
 function FooterLayout() {
   return (
     <footer className="min-h-100.25 py-12.5 border-t-2 border-primary max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
