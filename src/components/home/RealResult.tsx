@@ -126,6 +126,7 @@ function RealResult() {
             onClick={scrollLeft}
             disabled={!canScrollLeft}
             aria-label="Scroll left"
+            className="cursor-pointer"
           >
             <Image
               src={"/img/moveleft.png"}
@@ -139,6 +140,7 @@ function RealResult() {
             onClick={scrollRight}
             disabled={!canScrollRight}
             aria-label="Scroll right"
+            className="cursor-pointer"
           >
             <Image
               src={"/img/moveright.png"}
