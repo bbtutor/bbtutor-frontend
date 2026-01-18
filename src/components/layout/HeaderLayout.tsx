@@ -5,6 +5,7 @@ import HeaderLink from "./HeaderLinks";
 
 function HeaderLayout() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
   const headerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -17,19 +18,26 @@ function HeaderLayout() {
       }
     };
 
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 0);
+    };
+
     if (isMenuOpen) {
       document.addEventListener("mousedown", handleClickOutside);
     }
 
+    window.addEventListener("scroll", handleScroll);
+
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
+      window.removeEventListener("scroll", handleScroll);
     };
   }, [isMenuOpen]);
 
   return (
     <header
       ref={headerRef}
-      className="sticky top-0 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 z-40 h-16 sm:h-20 lg:h-24 flex items-center justify-between bg-white"
+      className={`sticky top-0 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 z-40 h-16 sm:h-20 lg:h-24 flex items-center justify-between bg-white transition-shadow duration-300 ${isScrolled ? "shadow-md" : ""}`}
     >
       <Image
         alt="Logo image"

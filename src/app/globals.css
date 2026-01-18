@@ -5,4 +5,14 @@
   --color-Black-fonts-headings: rgba(45, 46, 46, 1);
   --color-black: rgba(32, 33, 34, 1);
   --color-primary: rgba(0, 26, 131, 1);
+  --color-yellow: rgba(250, 204, 21, 1);
+}
+
+.gradient-bg {
+  background: linear-gradient(
+    243.57deg,
+    #ffffff 33.4%,
+    #d0e4f4 97.41%,
+    #001a83 155.35%
+  );
 }
