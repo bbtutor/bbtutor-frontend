@@ -4,8 +4,6 @@ import { Button } from "../ui/button";
 import { useRouter } from "next/navigation";
 
 function Hero() {
-  // TODO: Fix he alignment of the master text and the underline image
-
   const router = useRouter();
   return (
     <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 min-h-[704.53px] gradient-bg flex flex-col lg:flex-row items-center justify-between gap-8 lg:gap-20 py-8 lg:py-0">
