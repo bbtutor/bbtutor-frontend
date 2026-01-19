@@ -34,7 +34,7 @@ function Hero() {
         <div className="flex flex-col sm:flex-row gap-4 lg:gap-8 text-lg justify-start lg:justify-start">
           {/* Buttons */}
           <Button
-            onClick={() => router.push("/book-a-lesson")}
+            onClick={() => router.push("/book_a_lesson")}
             className="bg-yellow"
           >
             Book a Lesson

@@ -70,7 +70,7 @@ function HeaderLayout() {
           <HeaderLink href="/">Home</HeaderLink>
           <HeaderLink href="/about">About us</HeaderLink>
           <HeaderLink href="/video_lesson">Video Lesson</HeaderLink>
-          <HeaderLink href="/video_lesson">Book a Lesson</HeaderLink>
+          <HeaderLink href="/book_a_lesson">Book a Lesson</HeaderLink>
           <HeaderLink href="/become_a_tutor">Become a Tutor</HeaderLink>
         </ul>
       </nav>
@@ -111,9 +111,9 @@ function HeaderLayout() {
             <ul className="flex flex-col gap-6">
               <HeaderLink href="/">Home</HeaderLink>
               <HeaderLink href="/about">About us</HeaderLink>
-              <HeaderLink href="/contact">Video Lesson</HeaderLink>
-              <HeaderLink href="/contact">Book a Lesson</HeaderLink>
-              <HeaderLink href="/contact">Become a Tutor</HeaderLink>
+              <HeaderLink href="/video_lesson">Video Lesson</HeaderLink>
+              <HeaderLink href="/book_a_lesson">Book a Lesson</HeaderLink>
+              <HeaderLink href="/become_a_tutor">Become a Tutor</HeaderLink>
             </ul>
           </div>
         </nav>

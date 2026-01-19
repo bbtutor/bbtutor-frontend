@@ -7,7 +7,7 @@ function ReadyTo() {
   const router = useRouter();
 
   const handleBookLesson = () => {
-    router.push("/video_lesson");
+    router.push("/book_a_lesson");
   };
   return (
     <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 py-16 sm:py-20 bg-primary relative overflow-hidden">
