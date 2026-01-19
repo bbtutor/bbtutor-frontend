@@ -1,9 +1,9 @@
-import Hero from "@/components/book_a_lesson/Hero";
+import BookAHeroHero from "@/components/book_a_lesson/Hero";
 
 function BookALesson() {
   return (
     <section>
-      <Hero />
+      <BookAHeroHero />
     </section>
   );
 }
