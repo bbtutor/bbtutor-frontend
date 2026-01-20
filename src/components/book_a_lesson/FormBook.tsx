@@ -386,7 +386,7 @@ This email was sent from the BB Tutors booking form.
         isOpen={showSuccessPopup}
         onClose={() => setShowSuccessPopup(false)}
         title="Booking Prepared!"
-        message="Your booking request has been prepared! Please send the email from your email client."
+        message="Your booking request has been prepared! Please send the email."
         type="success"
         actionText="Got it"
       />

@@ -28,18 +28,26 @@ export default function InfoBox() {
     {
       icon: "/img/addressIcon.png",
       text: "Address: Murtala Mohammad Highway, Calabar, CRS",
+      link: "https://www.google.com/maps/search/?api=1&query=Murtala+Mohammad+Highway+Calabar+CRS",
+      type: "map",
     },
     {
       icon: "/img/blueEmailIcon.png",
       text: "bbtutors001@gmail.com",
+      link: "mailto:bbtutors001@gmail.com",
+      type: "email",
     },
     {
       icon: "/img/call.png",
       text: "+234 806 498 2027",
+      link: "tel:+2348064982027",
+      type: "phone",
     },
     {
       icon: "/img/whatsapp.png",
       text: "Available on WhatsApp",
+      link: "https://wa.me/2348064982027",
+      type: "whatsapp",
     },
   ];
 
@@ -93,17 +101,20 @@ export default function InfoBox() {
           Contact Information
         </h2>
         {ContactInfo.map((contact, index) => (
-          <div
+          <a
             key={index}
-            className="flex items-start gap-2.5 sm:gap-3 text-black"
+            href={contact.link}
+            target={"_blank"}
+            rel={contact.type === "map" ? "noopener noreferrer" : undefined}
+            className="flex items-start gap-2.5 sm:gap-3 text-black hover:text-primary transition-colors duration-200 cursor-pointer group hover:cursor-pointer"
           >
-            <span className="text-lg sm:text-xl shrink-0 mt-0.5">
+            <span className="text-lg sm:text-xl shrink-0 mt-0.5 group-hover:scale-110 transition-transform duration-200">
               <Image src={contact.icon} alt="Icon" width={20} height={20} />
             </span>
-            <p className="text-sm sm:text-base leading-5 sm:leading-6 wrap-break-word">
+            <p className="text-sm sm:text-base leading-5 sm:leading-6 wrap-break-word group-hover:underline">
               {contact.text}
             </p>
-          </div>
+          </a>
         ))}
       </aside>
     </div>
