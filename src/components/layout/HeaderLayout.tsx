@@ -24,6 +24,9 @@ function HeaderLayout() {
 
     if (isMenuOpen) {
       document.addEventListener("mousedown", handleClickOutside);
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
     }
 
     window.addEventListener("scroll", handleScroll);
@@ -31,8 +34,13 @@ function HeaderLayout() {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
       window.removeEventListener("scroll", handleScroll);
+      document.body.style.overflow = "unset";
     };
   }, [isMenuOpen]);
+
+  const handleLinkClick = () => {
+    setIsMenuOpen(false);
+  };
 
   return (
     <header
@@ -75,57 +83,78 @@ function HeaderLayout() {
         </ul>
       </nav>
 
-      {/* Mobile navigation */}
-      {/* TODO: Move the logo to the center of the mobile nav */}
-      {isMenuOpen && (
-        <nav className="sm:hidden fixed top-0 left-0 h-screen w-64 bg-white shadow-xl z-50 transform transition-transform duration-300 ease-in-out">
-          <div className="p-4 pt-20">
-            <div className="mb-8">
-              <Image
-                alt="Logo image"
-                src={"/img/logosvg.svg"}
-                height={60}
-                width={60}
-                className="h-16 w-16"
-              />
-            </div>
-            <button
-              onClick={() => setIsMenuOpen(false)}
-              className="absolute top-4 right-4 p-2 text-Black-fonts-headings hover:text-primary"
-              aria-label="Close menu"
+      {/* Mobile navigation with glassmorphism */}
+      <nav
+        className={`sm:hidden fixed top-0 right-0 h-screen w-72 z-50 transform transition-all duration-500 ease-in-out ${
+          isMenuOpen ? "translate-x-0" : "translate-x-full"
+        }`}
+        style={{
+          background: "rgba(255, 255, 255, 0.85)",
+          backdropFilter: "blur(20px)",
+          WebkitBackdropFilter: "blur(20px)",
+          borderLeft: "1px solid rgba(255, 255, 255, 0.3)",
+        }}
+      >
+        <div className="p-6 pt-20 h-full flex flex-col">
+          <button
+            onClick={() => setIsMenuOpen(false)}
+            className="absolute top-6 right-6 p-2 text-Black-fonts-headings hover:opacity-70 transition-opacity duration-200"
+            aria-label="Close menu"
+          >
+            <svg
+              className="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
             >
-              <svg
-                className="w-6 h-6"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              </svg>
-            </button>
-            <ul className="flex flex-col gap-6">
-              <HeaderLink href="/">Home</HeaderLink>
-              <HeaderLink href="/about">About us</HeaderLink>
-              <HeaderLink href="/video_lesson">Video Lesson</HeaderLink>
-              <HeaderLink href="/book_a_lesson">Book a Lesson</HeaderLink>
-              <HeaderLink href="/become_a_tutor">Become a Tutor</HeaderLink>
-            </ul>
-          </div>
-        </nav>
-      )}
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </button>
 
-      {/* Overlay */}
-      {isMenuOpen && (
-        <div
-          className="sm:hidden fixed inset-0 bg-transparent z-40"
-          onClick={() => setIsMenuOpen(false)}
-        />
-      )}
+          <ul className="flex flex-col gap-2 mt-4">
+            {[
+              { href: "/", label: "Home" },
+              { href: "/about", label: "About us" },
+              { href: "/video_lesson", label: "Video Lesson" },
+              { href: "/book_a_lesson", label: "Book a Lesson" },
+              { href: "/become_a_tutor", label: "Become a Tutor" },
+            ].map((link, index) => (
+              <li
+                key={link.href}
+                className={`transform transition-all duration-500 ${
+                  isMenuOpen
+                    ? "translate-x-0 opacity-100"
+                    : "translate-x-8 opacity-0"
+                }`}
+                style={{
+                  transitionDelay: isMenuOpen ? `${index * 50}ms` : "0ms",
+                }}
+              >
+                <div onClick={handleLinkClick}>
+                  <HeaderLink href={link.href}>
+                    <span className="block py-3 px-4 rounded-lg hover:bg-white/40 transition-all duration-200">
+                      {link.label}
+                    </span>
+                  </HeaderLink>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </nav>
+
+      {/* Overlay with smooth fade */}
+      <div
+        className={`sm:hidden fixed inset-0 bg-black/20 backdrop-blur-sm z-40 transition-opacity duration-500 ${
+          isMenuOpen ? "opacity-100" : "opacity-0 pointer-events-none"
+        }`}
+        onClick={() => setIsMenuOpen(false)}
+      />
     </header>
   );
 }
