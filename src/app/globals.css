@@ -8,6 +8,7 @@
   --color-yellow: rgba(250, 204, 21, 1);
   --color-blue-gray: rgba(226, 232, 240, 1);
   --color-blue-gray-900: rgba(15, 23, 42, 1);
+  --color-icon: rgba(75, 75, 75, 1);
 }
 
 .gradient-bg {
@@ -26,4 +27,8 @@
 
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
+}
+
+.form-shadow {
+  box-shadow: 0px 4px 4px 0px #00000040;
 }
