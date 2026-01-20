@@ -10,7 +10,7 @@ function BoxList({ contents }: { contents: BoxContents[] }) {
     return (
       <div
         key={index}
-        className="flex gap-2 sm:gap-4 p-3 sm:p-4 lg:p-8 flex-col items-center justify-center border-[0.5px] border-primary rounded-lg sm:rounded-[10px]"
+        className="flex gap-2 sm:gap-4 p-3 sm:p-4 lg:p-8 flex-col items-center justify-center border-[0.5px] border-primary rounded-lg sm:rounded-[10px] hover:scale-105 transition-all duration-300"
       >
         {content.icon && (
           <Image
@@ -28,7 +28,7 @@ function BoxList({ contents }: { contents: BoxContents[] }) {
     );
   });
   return (
-    <div className="mt-12 sm:mt-16 lg:mt-20 flex flex-col sm:flex-row gap-3 sm:gap-4 lg:gap-6">
+    <div className="mt-12 sm:mt-16 lg:mt-20 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-20">
       {displayContents}
     </div>
   );
