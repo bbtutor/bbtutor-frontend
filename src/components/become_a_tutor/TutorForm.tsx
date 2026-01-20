@@ -27,6 +27,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useState } from "react";
 
+// TODO: Fix the paddding and spacing btw label and input
+
 // Define validation schema using Zod
 const formSchema = z.object({
   firstName: z
@@ -84,10 +86,13 @@ const formSchema = z.object({
     .max(200, "Subject must not exceed 200 characters"),
 
   cv: z
-    .instanceof(FileList)
-    .refine((files) => files.length > 0, "CV is required")
+    .any()
     .refine(
-      (files) => files[0]?.size <= 5 * 1024 * 1024,
+      (files) => files instanceof FileList && files.length > 0,
+      "CV is required",
+    )
+    .refine(
+      (files) => files instanceof FileList && files[0]?.size <= 5 * 1024 * 1024,
       "File size must be less than 5MB",
     )
     .refine((files) => {
@@ -96,7 +101,7 @@ const formSchema = z.object({
         "application/msword",
         "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
       ];
-      return validTypes.includes(files[0]?.type);
+      return files instanceof FileList && validTypes.includes(files[0]?.type);
     }, "Only PDF, DOC, and DOCX files are accepted"),
 
   message: z
@@ -435,7 +440,7 @@ Note: Please request the CV file from the applicant directly.
           </div>
           {errors.cv && (
             <p className="text-red-500 text-xs sm:text-sm mt-1">
-              {errors.cv.message}
+              {errors.cv?.message?.toString() || "Invalid file"}
             </p>
           )}
         </div>
