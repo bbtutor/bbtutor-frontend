@@ -6,8 +6,8 @@ import { useRouter } from "next/navigation";
 function TutorHero() {
   const router = useRouter();
   return (
-    <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 min-h-[704.53px] gradient-bg flex flex-col lg:flex-row items-center justify-between gap-8 lg:gap-20 py-8 lg:py-0">
-      <div className="basis-full lg:basis-[55%] text-left lg:text-left">
+    <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 min-h-[704.53px] gradient-bg flex flex-col lg:flex-row items-center justify-between gap-8 lg:gap-12 xl:gap-20 py-12 lg:py-16">
+      <div className="basis-full lg:basis-[55%] text-left">
         <div className="relative text-black">
           <p className="font-semibold text-4xl sm:text-5xl lg:text-6xl leading-tight lg:leading-18 -tracking-[5%]">
             Become a Tutor at
@@ -39,14 +39,13 @@ function TutorHero() {
         </Button>
       </div>
 
-      {/* TODO: Change this image to the tutor image */}
-      <div className="basis-full lg:basis-[40%] mt-0 lg:mt-0 flex justify-center">
+      <div className="basis-full lg:basis-[50%] flex justify-center lg:justify-end">
         <Image
           alt="Students"
-          src={"/img/heroImage.png"}
-          width={500}
-          height={450}
-          className="w-full max-w-md lg:max-w-none h-auto"
+          src={"/img/becomeTutor.png"}
+          width={817.9996948242188}
+          height={558.4201049804688}
+          className="w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl h-auto"
         />
       </div>
     </section>
