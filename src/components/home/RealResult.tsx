@@ -3,6 +3,7 @@ import Image from "next/image";
 import Paragraph from "../ui/paragraph";
 import Title from "../ui/title";
 import { useRef, useState } from "react";
+import { ArrowLeftCircle, ArrowRightCircle } from "lucide-react";
 
 function RealResult() {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
@@ -128,13 +129,7 @@ function RealResult() {
             aria-label="Scroll left"
             className="cursor-pointer"
           >
-            <Image
-              src={"/img/moveleft.png"}
-              alt="Move left"
-              width={40}
-              height={40}
-              className="lg:w-12 lg:h-12"
-            />
+            <ArrowLeftCircle className="h-12 w-12" />
           </button>
           <button
             onClick={scrollRight}
@@ -142,13 +137,7 @@ function RealResult() {
             aria-label="Scroll right"
             className="cursor-pointer"
           >
-            <Image
-              src={"/img/moveright.png"}
-              alt="Move right"
-              width={40}
-              height={40}
-              className="lg:w-12 lg:h-12"
-            />
+            <ArrowRightCircle className="h-12 w-12" />
           </button>
         </div>
       </div>

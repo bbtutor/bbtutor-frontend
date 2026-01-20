@@ -234,7 +234,7 @@ Note: Please request the CV file from the applicant directly.
           </div>
 
           {/* Last Name Input */}
-          <div className="space-y-2">
+          <div className="space-y-3">
             <Label htmlFor="lastName" className="text-sm sm:text-base">
               Last name
             </Label>
@@ -261,7 +261,7 @@ Note: Please request the CV file from the applicant directly.
         {/* Second Row - Date and Phone */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-6">
           {/* Date of Birth Input */}
-          <div className="space-y-2">
+          <div className="space-y-3">
             <Label htmlFor="dob" className="text-sm sm:text-base">
               Date of birth
             </Label>
@@ -284,7 +284,7 @@ Note: Please request the CV file from the applicant directly.
           </div>
 
           {/* Phone Number Input */}
-          <div className="space-y-2">
+          <div className="space-y-3">
             <Label htmlFor="phone" className="text-sm sm:text-base">
               Phone number
             </Label>
@@ -309,7 +309,7 @@ Note: Please request the CV file from the applicant directly.
         </div>
 
         {/* Third Row - Residential Address */}
-        <div className="space-y-2">
+        <div className="space-y-3">
           <Label htmlFor="address" className="text-sm sm:text-base">
             Residential Address
           </Label>
@@ -333,7 +333,7 @@ Note: Please request the CV file from the applicant directly.
         </div>
 
         {/* Fourth Row - Email */}
-        <div className="space-y-2">
+        <div className="space-y-3">
           <Label htmlFor="email" className="text-sm sm:text-base">
             Email
           </Label>
@@ -357,7 +357,7 @@ Note: Please request the CV file from the applicant directly.
         </div>
 
         {/* Fifth Row - Education Level */}
-        <div className="space-y-2">
+        <div className="space-y-3">
           <Label htmlFor="education" className="text-sm sm:text-base">
             Education Level
           </Label>
@@ -398,7 +398,7 @@ Note: Please request the CV file from the applicant directly.
         </div>
 
         {/* Sixth Row - Subject */}
-        <div className="space-y-2">
+        <div className="space-y-3">
           <Label htmlFor="subject" className="text-sm sm:text-base">
             Subject
           </Label>
@@ -422,7 +422,7 @@ Note: Please request the CV file from the applicant directly.
         </div>
 
         {/* Seventh Row - CV Upload */}
-        <div className="space-y-2">
+        <div className="space-y-3">
           <Label htmlFor="cv" className="text-sm sm:text-base">
             Upload your CV
           </Label>
@@ -446,7 +446,7 @@ Note: Please request the CV file from the applicant directly.
         </div>
 
         {/* Eighth Row - Message */}
-        <div className="space-y-2">
+        <div className="space-y-3">
           <Label htmlFor="message" className="text-sm sm:text-base">
             Message
           </Label>

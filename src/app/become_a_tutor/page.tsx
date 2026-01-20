@@ -1,10 +1,11 @@
 import FormPage from "@/components/become_a_tutor/FormPage";
 import JoinOurTeam from "@/components/become_a_tutor/JoinOurTeam";
+import TutorHero from "@/components/become_a_tutor/TutorHero";
 
 function Page() {
   return (
     <section>
-      {/* TODO: Build the Hero section first */}
+      <TutorHero />
       <JoinOurTeam />
       <FormPage />
     </section>

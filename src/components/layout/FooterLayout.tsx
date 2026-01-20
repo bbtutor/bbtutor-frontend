@@ -27,16 +27,16 @@ function FooterLayout() {
               About Us
             </Link>
             <Link
-              href="/courses"
+              href="/video_lesson"
               className="hover:text-primary transition-colors"
             >
               Courses
             </Link>
             <Link
-              href="/book_a_tutor"
+              href="/book_a_lesson"
               className="hover:text-primary transition-colors"
             >
-              Book a Tutor
+              Book a Lesson
             </Link>
           </ul>
         </div>

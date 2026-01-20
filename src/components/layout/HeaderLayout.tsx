@@ -2,6 +2,7 @@
 import Image from "next/image";
 import { useState, useEffect, useRef } from "react";
 import HeaderLink from "./HeaderLinks";
+import { X } from "lucide-react";
 
 function HeaderLayout() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -101,19 +102,7 @@ function HeaderLayout() {
             className="absolute top-6 right-6 p-2 text-Black-fonts-headings hover:opacity-70 transition-opacity duration-200"
             aria-label="Close menu"
           >
-            <svg
-              className="w-6 h-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M6 18L18 6M6 6l12 12"
-              />
-            </svg>
+            <X className="w-6 h-6" />
           </button>
 
           <ul className="flex flex-col gap-2 mt-4">
@@ -151,7 +140,7 @@ function HeaderLayout() {
       {/* Overlay with smooth fade */}
       <div
         className={`sm:hidden fixed inset-0 bg-black/20 backdrop-blur-sm z-40 transition-opacity duration-500 ${
-          isMenuOpen ? "opacity-100" : "opacity-0 pointer-events-none"
+          isMenuOpen ? "opacity-70" : "opacity-0 pointer-events-none"
         }`}
         onClick={() => setIsMenuOpen(false)}
       />

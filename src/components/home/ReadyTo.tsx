@@ -42,10 +42,7 @@ function ReadyTo() {
         </p>
 
         <div className="mt-6 sm:mt-8">
-          <Button
-            onClick={handleBookLesson}
-            className="bg-white text-primary hover:bg-gray-100 transition-colors duration-200 px-6 sm:px-8 py-2 sm:py-3 text-sm sm:text-base"
-          >
+          <Button onClick={handleBookLesson} className="bg-white text-primary">
             Book a Lesson
           </Button>
         </div>
