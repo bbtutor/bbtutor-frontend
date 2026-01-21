@@ -3,6 +3,7 @@ import { Poppins } from "next/font/google";
 import "./globals.css";
 import HeaderLayout from "@/components/layout/HeaderLayout";
 import FooterLayout from "@/components/layout/FooterLayout";
+import { KeepAlive } from "@/hooks/useKeepAlive";
 
 const poppins = Poppins({
   // Import poppins font
@@ -39,6 +40,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${poppins.className} antialiased min-h-screen w-full`}>
+        <KeepAlive />
         <HeaderLayout />
         <main className="min-h-screen">{children}</main>
         <FooterLayout />
