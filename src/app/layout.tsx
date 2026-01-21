@@ -11,8 +11,8 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "Bb Tutor",
-  description: "Bb Tutor online tutoring platform",
+  title: "Bb Tutors",
+  description: "Bb Tutors online tutoring platform",
 
   icons: {
     icon: "/img/logo.png",
