@@ -23,7 +23,7 @@ function NoBoxList({ contents }: { contents: BoxContents[] }) {
         <h3 className="my-4 font-semibold leading-7.5 text-xl lg:text-xl text-blue-gray-900 text-center ">
           {content.title}
         </h3>
-        <p className="text-center text-blue-gray-900 text-sm leading-5 max-w-xs">
+        <p className="text-black text-center text-sm leading-5 max-w-xs">
           {content.text}
         </p>
       </div>

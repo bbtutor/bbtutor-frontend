@@ -32,7 +32,7 @@ const WhyBB = () => {
           height={48}
           className="sm:w-12 sm:h-12"
         />
-        <p className="text-center text-black leading-5 text-xs sm:text-sm sm:leading-6">
+        <p className="text-black text-center text-sm leading-5 max-w-xs">
           {reason.text}
         </p>
       </div>
