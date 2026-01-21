@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
 import HeaderLayout from "@/components/layout/HeaderLayout";
@@ -13,7 +13,23 @@ const poppins = Poppins({
 export const metadata: Metadata = {
   title: "Bb Tutor",
   description: "Bb Tutor online tutoring platform",
+
+  icons: {
+    icon: "/img/logo.png",
+    apple: "/img/logo.png", // For iOS devices
+  },
+
+  // Additional metadata
+  keywords: ["tutoring", "online learning", "education"],
+  authors: [{ name: "Favour Okpara" }],
 };
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+};
+
+console.log(process.env.BASEURL);
 
 export default function RootLayout({
   children,
