@@ -219,7 +219,7 @@ Note: Please request the CV file from the applicant directly.
               <Input
                 id="firstName"
                 type="text"
-                placeholder="Sochima"
+                placeholder="Jane"
                 {...register("firstName")}
                 className={`pl-9 sm:pl-10 h-11 sm:h-12 text-sm sm:text-base border-gray-300 focus:border-gray-400 focus:ring-gray-400 ${
                   errors.firstName ? "border-red-500" : ""
@@ -243,7 +243,7 @@ Note: Please request the CV file from the applicant directly.
               <Input
                 id="lastName"
                 type="text"
-                placeholder="Okoye"
+                placeholder="Doe"
                 {...register("lastName")}
                 className={`pl-9 sm:pl-10 h-11 sm:h-12 text-sm sm:text-base border-gray-300 focus:border-gray-400 focus:ring-gray-400 ${
                   errors.lastName ? "border-red-500" : ""
@@ -342,7 +342,7 @@ Note: Please request the CV file from the applicant directly.
             <Input
               id="email"
               type="email"
-              placeholder="Sochima@gmail.com"
+              placeholder="janedoe@gmail.com"
               {...register("email")}
               className={`pl-9 sm:pl-10 h-11 sm:h-12 text-sm sm:text-base border-gray-300 focus:border-gray-400 focus:ring-gray-400 ${
                 errors.email ? "border-red-500" : ""
