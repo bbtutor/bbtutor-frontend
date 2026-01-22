@@ -8,6 +8,7 @@ import Loader from "../ui/loader";
 import ErrorMessage from "../ui/errorMessage";
 import getEmbedUrl from "@/hooks/getEmbedUrl";
 import BuyLessonPopUp from "./BuyLessonPopUp";
+import api from "@/lib/AxiosInstance";
 
 interface Instructor {
   _id: string;
@@ -42,7 +43,7 @@ interface ApiResponse {
   success: boolean;
 }
 
-const fetcher = (url: string) => axios.get(url).then((res) => res.data);
+const fetcher = (url: string) => api.get(url).then((res) => res.data);
 
 function MathematicsVideoLesson() {
   const [currentPage, setCurrentPage] = useState(1);

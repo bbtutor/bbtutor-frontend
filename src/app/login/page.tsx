@@ -10,6 +10,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import api from "@/lib/AxiosInstance";
+import { toast } from "sonner";
 
 const loginSchema = z.object({
   email: z
@@ -46,33 +48,30 @@ function Login() {
     setLoginError(null);
 
     try {
-      // Fixed: Send data directly, not wrapped in { data }
-      const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_BASEURL}/auth/login`,
-        {
-          email: data.email,
-          password: data.password,
-        },
-      );
+      const response = await api.post("/auth/login", data);
+      const user = response.data.user;
 
-      console.log(response.data);
+      // Store accessToken in cookies for middleware access
+      document.cookie = `accessToken=${response.data.accessToken}; path=/; max-age=${60 * 60 * 24}`; // 1 day
 
-      // Store access token and role in localStorage
+      // Store user data in localStorage
+      localStorage.setItem("user", JSON.stringify(user));
 
-      // Redirect to createLesson page
-      router.push("/createLesson");
+      toast.success("Login successful!");
+
+      // Small delay for better UX
+      setTimeout(() => {
+        router.push("/createLesson");
+      }, 500);
     } catch (error) {
       console.error("Login error:", error);
 
-      //   Error handling
       if (axios.isAxiosError(error)) {
         if (error.response) {
-          // Server responded with error
           const message =
             error.response.data?.message || error.response.data?.error;
-          setLoginError(message || "Invald Credentials");
+          setLoginError(message || "Invalid Credentials");
         } else if (error.request) {
-          // Request made but no response
           setLoginError(
             "Unable to connect to server. Please check your internet connection.",
           );
