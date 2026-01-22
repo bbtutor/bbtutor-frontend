@@ -77,7 +77,7 @@ export default function Popup({
             className={cn(
               "w-16 h-16 rounded-full flex items-center justify-center",
               type === "success"
-                ? "bg-green-100 text-green-600"
+                ? "bg-yellow-100 text-yellow"
                 : "bg-red-100 text-red-600",
             )}
           >
@@ -124,7 +124,7 @@ export default function Popup({
             className={cn(
               "w-full h-12 text-base font-semibold transition-colors duration-200",
               type === "success"
-                ? "bg-green-600 hover:bg-green-700 text-white"
+                ? "bg-yellow hover:bg-yellow-600 text-white"
                 : "bg-red-600 hover:bg-red-700 text-white",
             )}
           >

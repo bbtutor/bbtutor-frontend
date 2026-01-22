@@ -3,10 +3,11 @@ import Title from "../ui/title";
 import Paragraph from "../ui/paragraph";
 import axios from "axios";
 import useSWR from "swr";
+import { useState } from "react";
 import Loader from "../ui/loader";
 import ErrorMessage from "../ui/errorMessage";
 import getEmbedUrl from "@/hooks/getEmbedUrl";
-import { Button } from "../ui/button";
+import BuyLessonPopUp from "./BuyLessonPopUp";
 
 interface Instructor {
   _id: string;
@@ -44,13 +45,21 @@ interface ApiResponse {
 const fetcher = (url: string) => axios.get(url).then((res) => res.data);
 
 function MathematicsVideoLesson() {
+  const [currentPage, setCurrentPage] = useState(1);
+  const lessonsPerPage = 6; // Show 6 lessons per page (2 rows of 3 on desktop)
+
   const {
     data: response,
     error,
     isLoading,
   } = useSWR<ApiResponse>(
-    `${process.env.NEXT_PUBLIC_BASEURL}/lesson/get-lessons`,
+    `${process.env.NEXT_PUBLIC_BASEURL}/lesson/get-lessons?page=${currentPage}&limit=${lessonsPerPage}`,
     fetcher,
+    {
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+      dedupingInterval: 5_000, // 5 seconds
+    },
   );
 
   if (isLoading) {
@@ -62,6 +71,7 @@ function MathematicsVideoLesson() {
   }
 
   const lessons = response?.data || [];
+  const pagination = response?.pagination;
 
   const displayLessons = lessons.map((lesson) => {
     return (
@@ -117,7 +127,10 @@ function MathematicsVideoLesson() {
           ))}
         </ul>
 
-        <Button className="bg-yellow mb-3">Buy this Lesson</Button>
+        <BuyLessonPopUp
+          lessonTitle={lesson.title}
+          paymentLink={lesson.paymentLink}
+        />
       </div>
     );
   });
@@ -133,6 +146,52 @@ function MathematicsVideoLesson() {
       <div className="mt-12 sm:mt-16 lg:mt-20 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-20">
         {displayLessons}
       </div>
+
+      {/* Pagination Controls */}
+      {pagination && pagination.totalPages > 1 && (
+        <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setCurrentPage(currentPage - 1)}
+              disabled={currentPage === 1}
+              className="px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Previous
+            </button>
+
+            <div className="flex items-center gap-1">
+              {Array.from(
+                { length: pagination.totalPages },
+                (_, index) => index + 1,
+              ).map((page) => (
+                <button
+                  key={page}
+                  onClick={() => setCurrentPage(page)}
+                  className={`w-8 h-8 text-sm font-medium rounded-md ${
+                    currentPage === page
+                      ? "bg-primary text-white"
+                      : "text-gray-700 bg-white border border-gray-300 hover:bg-gray-50"
+                  }`}
+                >
+                  {page}
+                </button>
+              ))}
+            </div>
+
+            <button
+              onClick={() => setCurrentPage(currentPage + 1)}
+              disabled={currentPage === pagination.totalPages}
+              className="px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Next
+            </button>
+          </div>
+
+          <div className="text-sm text-gray-600">
+            Showing {lessons.length} of {pagination.total} lessons
+          </div>
+        </div>
+      )}
     </section>
   );
 }
