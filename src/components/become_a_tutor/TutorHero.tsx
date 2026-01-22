@@ -1,10 +1,10 @@
 "use client";
 import Image from "next/image";
 import { Button } from "../ui/button";
-import { useRouter } from "next/navigation";
+
 
 function TutorHero() {
-  const router = useRouter();
+  
   return (
     <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 min-h-[704.53px] gradient-bg flex flex-col lg:flex-row items-center justify-between gap-8 lg:gap-12 xl:gap-20 py-12 lg:py-16">
       <div className="basis-full lg:basis-[55%] text-left">
@@ -32,7 +32,13 @@ function TutorHero() {
         </p>
 
         <Button
-          onClick={() => router.push("/book_a_lesson")}
+          onClick={() => {
+            const scrollDistance = window.innerWidth < 768 ? 1700 : window.innerWidth < 1024 ? 1500 : 1300;
+            window.scrollTo({
+              top: window.scrollY + scrollDistance,
+              behavior: 'smooth'
+            });
+          }}
           className="bg-yellow"
         >
           Apply Now

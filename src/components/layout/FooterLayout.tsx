@@ -5,7 +5,7 @@ function FooterLayout() {
   return (
     <footer className="min-h-100.25 py-12.5 border-t-2 border-primary max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
       <section className="flex flex-col sm:flex-row items-start justify-between gap-8 sm:gap-0">
-        <div className="flex flex-col items-center sm:items-start">
+        <div className="flex flex-col items-start sm:items-start">
           <Image
             src="/img/logo.png"
             alt="BBTutor Logo"
@@ -14,7 +14,7 @@ function FooterLayout() {
           />
         </div>
 
-        <div className="w-full sm:w-auto text-center sm:text-left">
+        <div className="w-full sm:w-auto text-left sm:text-left">
           <h3 className="text-primary">Quick Links</h3>
           <ul className="mt-7.5 flex flex-col gap-2 text-black text-sm">
             <Link href="/" className="hover:text-primary transition-colors">
@@ -41,7 +41,7 @@ function FooterLayout() {
           </ul>
         </div>
 
-        <div className="w-full sm:w-auto text-center sm:text-left">
+        <div className="w-full sm:w-auto text-left sm:text-left">
           <h3 className="text-primary">Socials</h3>
           <ul className="mt-7.5 flex flex-col gap-2 text-black text-sm">
             <Link
@@ -95,7 +95,7 @@ function FooterLayout() {
         </div>
       </section>
 
-      <p className="mt-12.5 text-xs text-center leading-5 text-black">
+      <p className="mt-12.5 text-xs text-left sm:text-center leading-5 text-black">
         © 2026 BB Tutors. All rights reserved.
       </p>
     </footer>

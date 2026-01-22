@@ -17,7 +17,7 @@ function JoinSocialMedia() {
                 "_blank",
               )
             }
-            className="rounded-4xl border border-primary p-1.5 sm:p-2 lg:p-3 flex gap-1 sm:gap-1.5 lg:gap-2 items-center justify-center w-full max-w-60 sm:max-w-70 lg:max-w-[320px] bg-white"
+            className="rounded-4xl border border-primary p-1.5 sm:p-2 lg:p-2.5 flex gap-1 sm:gap-1.5 lg:gap-2 items-center justify-center w-full max-w-60 sm:max-w-70 lg:max-w-[320px] bg-white"
           >
             <Image
               src={"/img/whatsapp Message circle.png"}
@@ -35,7 +35,7 @@ function JoinSocialMedia() {
         {showSocialButtons && (
           <button
             onClick={() => window.open("https://t.me/bbtutors", "_blank")}
-            className="rounded-4xl border border-primary p-1.5 sm:p-2 lg:p-3 flex gap-1 sm:gap-1.5 lg:gap-2 items-center justify-center w-full max-w-60 sm:max-w-70 lg:max-w-[320px] bg-white"
+            className="rounded-4xl border border-primary p-1.5 sm:p-2 lg:p-2.5 flex gap-1 sm:gap-1.5 lg:gap-2 items-center justify-center w-full max-w-60 sm:max-w-70 lg:max-w-[320px] bg-white"
           >
             <Image
               src={"/img/Variant2.svg"}
@@ -53,7 +53,7 @@ function JoinSocialMedia() {
         {/* Big button below telegram icon*/}
         <button
           onClick={() => setShowSocialButtons(!showSocialButtons)}
-          className="gradient-btn rounded-[20.55px] p-3 sm:p-4 lg:p-6 flex items-center justify-center gap-1 sm:gap-1.5 lg:gap-2 relative w-full max-w-65 sm:max-w-75 lg:max-w-87.5"
+          className="gradient-btn rounded-[20.55px] p-3 sm:p-4 lg:p-5 flex items-center justify-center gap-1 sm:gap-1.5 lg:gap-2 relative w-full max-w-65 sm:max-w-75 lg:max-w-87.5"
         >
           <aside className="flex flex-col gap-0.5">
             <Image

@@ -42,7 +42,7 @@ function NeedHelp() {
         </p>
 
         <div className="mt-6 sm:mt-8">
-          <Button onClick={handleBookLesson} className="bg-white text-primary">
+          <Button onClick={handleBookLesson} className="bg-yellow text-primary">
             Contact us now
           </Button>
         </div>
