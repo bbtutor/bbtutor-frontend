@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useState } from "react";
 
 function JoinSocialMedia() {
+  // Floating button on the left for the social media groups
   const [showSocialButtons, setShowSocialButtons] = useState(false);
   return (
     <section className="z-50">
@@ -16,14 +17,14 @@ function JoinSocialMedia() {
                 "_blank",
               )
             }
-            className="rounded-4xl border border-primary p-2 sm:p-3 lg:p-4 flex gap-1.5 sm:gap-2 lg:gap-3 items-center justify-center w-full max-w-70 sm:max-w-[320px] bg-white"
+            className="rounded-4xl border border-primary p-1.5 sm:p-2 lg:p-3 flex gap-1 sm:gap-1.5 lg:gap-2 items-center justify-center w-full max-w-60 sm:max-w-70 lg:max-w-[320px] bg-white"
           >
             <Image
               src={"/img/whatsapp Message circle.png"}
               alt="Whatsapp icon"
-              width={20}
-              height={20}
-              className="sm:w-6 sm:h-6 lg:w-8 lg:h-8"
+              width={16}
+              height={16}
+              className="sm:w-5 sm:h-5 lg:w-6 lg:h-6"
             />
             <span className="text-xs sm:text-sm lg:text-lg font-semibold">
               Whatsapp
@@ -34,14 +35,14 @@ function JoinSocialMedia() {
         {showSocialButtons && (
           <button
             onClick={() => window.open("https://t.me/bbtutors", "_blank")}
-            className="rounded-4xl border border-primary p-2 sm:p-3 lg:p-4 flex gap-1.5 sm:gap-2 lg:gap-3 items-center justify-center w-full max-w-70 sm:max-w-[320px] bg-white"
+            className="rounded-4xl border border-primary p-1.5 sm:p-2 lg:p-3 flex gap-1 sm:gap-1.5 lg:gap-2 items-center justify-center w-full max-w-60 sm:max-w-70 lg:max-w-[320px] bg-white"
           >
             <Image
               src={"/img/Variant2.svg"}
               alt="Telegram icon"
-              width={20}
-              height={20}
-              className="sm:w-6 sm:h-6 lg:w-8 lg:h-8"
+              width={16}
+              height={16}
+              className="sm:w-5 sm:h-5 lg:w-6 lg:h-6"
             />
             <span className="text-xs sm:text-sm lg:text-lg font-semibold">
               Telegram
@@ -52,45 +53,45 @@ function JoinSocialMedia() {
         {/* Big button below telegram icon*/}
         <button
           onClick={() => setShowSocialButtons(!showSocialButtons)}
-          className="gradient-btn rounded-[20.55px] p-4 sm:p-6 lg:p-10 flex items-center justify-center gap-1.5 sm:gap-2 lg:gap-4 relative w-full max-w-75 sm:max-w-87.5"
+          className="gradient-btn rounded-[20.55px] p-3 sm:p-4 lg:p-6 flex items-center justify-center gap-1 sm:gap-1.5 lg:gap-2 relative w-full max-w-65 sm:max-w-75 lg:max-w-87.5"
         >
-          <aside className="flex flex-col gap-0.5 sm:gap-1">
+          <aside className="flex flex-col gap-0.5">
             <Image
               src={"/img/whatsappBtnIcon.png"}
               alt="Whatsapp icon"
-              width={20}
-              height={20}
-              className="sm:w-6 sm:h-6 lg:w-8 lg:h-8"
+              width={16}
+              height={16}
+              className="sm:w-5 sm:h-5 lg:w-6 lg:h-6"
             />
 
             <Image
               src={"/img/paperPlane.png"}
               alt="Whatsapp icon"
-              width={20}
-              height={20}
-              className="sm:w-6 sm:h-6 lg:w-8 lg:h-8"
+              width={16}
+              height={16}
+              className="sm:w-5 sm:h-5 lg:w-6 lg:h-6"
             />
           </aside>
 
           <aside>
             <p className="font-bold text-white leading-6">
-              <span className="text-sm sm:text-base lg:text-xl block">
+              <span className="hidden sm:block text-xs sm:text-sm lg:text-base">
                 JOIN OUR FREE{" "}
               </span>
-              <span className="block text-xs sm:text-sm lg:text-base">
+              <span className="hidden sm:block text-[10px] sm:text-xs lg:text-sm">
                 Learning groups!
               </span>
-              <span className="block text-[8px] sm:text-[10px] lg:text-[11px] font-normal">
+              <span className="hidden sm:block text-[7px] sm:text-[8px] lg:text-[10px] font-normal">
                 WhatsApp & Telegram
               </span>
             </p>
           </aside>
 
-          <aside className="text-white text-xl sm:text-2xl lg:text-4xl semi-bold">
+          <aside className="text-white text-lg sm:text-xl lg:text-2xl semi-bold">
             +
           </aside>
 
-          <CircleAlert className="absolute -top-2 animate-pulse right-0 z-50 bg-red-500 text-white rounded-full" />
+          <CircleAlert className="absolute -top-2 animate-pulse right-0 z-50 bg-red-500 text-white rounded-full w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8" />
         </button>
       </div>
     </section>

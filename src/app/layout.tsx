@@ -30,8 +30,6 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
-console.log(process.env.BASEURL);
-
 export default function RootLayout({
   children,
 }: Readonly<{
