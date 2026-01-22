@@ -38,6 +38,18 @@ function FooterLayout() {
             >
               Book a Lesson
             </Link>
+            <Link
+              href="/login"
+              className="hover:text-primary transition-colors"
+            >
+              Admin Login
+            </Link>
+            <Link
+              href="/createLesson"
+              className="hover:text-primary transition-colors"
+            >
+              Create Leasson
+            </Link>
           </ul>
         </div>
 

@@ -110,7 +110,7 @@ export default function BuyLessonPopUp({
 
       {/* Receipt Submission Dialog */}
       <AlertDialog open={showReceiptDialog} onOpenChange={setShowReceiptDialog}>
-        <AlertDialogContent className="bg-white max-w-[85vw] sm:max-w-md md:max-w-lg lg:max-w-xl mx-4 max-h-[80vh] overflow-y-auto left-1/2 -translate-x-1/2">
+        <AlertDialogContent className="bg-white max-w-[90vw] sm:max-w-md md:max-w-lg lg:max-w-xl mx-auto max-h-[80vh] overflow-y-auto left-1/2 -translate-x-1/2">
           <AlertDialogHeader>
             <AlertDialogTitle className="text-center text-sm sm:text-base">
               Submit Payment Receipt

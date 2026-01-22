@@ -186,10 +186,6 @@ function MathematicsVideoLesson() {
               Next
             </button>
           </div>
-
-          <div className="text-sm text-gray-600">
-            Showing {lessons.length} of {pagination.total} lessons
-          </div>
         </div>
       )}
     </section>
