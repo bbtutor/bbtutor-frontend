@@ -21,6 +21,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import api from "@/lib/AxiosInstance";
 import axios from "axios";
+import { useEffect } from "react";
+import { useUserStore } from "@/store/useUserStore";
+import { useRouter } from "next/navigation";
 
 const createLessonSchema = z.object({
   title: z
@@ -70,6 +73,9 @@ type CreateLessonFormData = z.infer<typeof createLessonSchema>;
 function CreateLessonpage() {
   const [isLoading, setIsLoading] = useState(false);
   const [lessonsInput, setLessonsInput] = useState("");
+  const [isHydrated, setIsHydrated] = useState(false);
+  const user = useUserStore((state) => state.user);
+  const router = useRouter();
 
   const {
     register,
@@ -122,6 +128,26 @@ function CreateLessonpage() {
     const updatedLessons = lessonsCovered.filter((_, i) => i !== index);
     setValue("lessonsCovered", updatedLessons);
   };
+
+  useEffect(() => {
+    setIsHydrated(true);
+  }, []);
+
+  // ✅ Only check auth after hydration
+  useEffect(() => {
+    if (isHydrated && !user) {
+      router.push("/login");
+    }
+  }, [user, router, isHydrated]);
+
+  // ✅ Show loading while hydrating
+  if (!isHydrated || !user) {
+    return (
+      <div className="min-h-screen flex items-center justify-center gradient-bg">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    );
+  }
 
   const onSubmit = async (data: CreateLessonFormData) => {
     setIsLoading(true);

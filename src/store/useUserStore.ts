@@ -1,5 +1,6 @@
 // store/useUserStore.ts
 import { create } from "zustand";
+import { createJSONStorage, persist } from "zustand/middleware";
 import api from "@/lib/AxiosInstance";
 import axios from "axios";
 
@@ -39,50 +40,59 @@ const getErrorMessage = (
   return fallback;
 };
 
-export const useUserStore = create<UserState>((set) => ({
-  // Initial state
-  user: null,
-  loading: false,
-  error: null,
+export const useUserStore = create<UserState>()(
+  persist(
+    (set) => ({
+      // Initial state
+      user: null,
+      loading: false,
+      error: null,
 
-  // Fetch user from backend
-  fetchUser: async () => {
-    set({ loading: true, error: null });
-    try {
-      const response = await api.get("/auth/current-user");
-      set({
-        user: response.data.user,
-        loading: false,
-      });
-    } catch (error) {
-      console.error("Error fetching user:", error);
-      set({
-        user: null,
-        loading: false,
-        error: getErrorMessage(error, "Failed to fetch user data"),
-      });
-    }
-  },
+      // Fetch user from backend
+      fetchUser: async () => {
+        set({ loading: true, error: null });
+        try {
+          const response = await api.get("/auth/current-user");
+          set({
+            user: response.data.user,
+            loading: false,
+          });
+        } catch (error) {
+          console.error("Error fetching user:", error);
+          set({
+            user: null,
+            loading: false,
+            error: getErrorMessage(error, "Failed to fetch user data"),
+          });
+        }
+      },
 
-  // Manually set user (useful after login)
-  setUser: (user) => {
-    set({ user, error: null });
-  },
+      // Manually set user (useful after login)
+      setUser: (user) => {
+        set({ user, error: null });
+      },
 
-  // Logout user
-  //   logout: async () => {
-  //     set({ loading: true });
-  //     try {
-  //       await api.post("/auth/current-user");
-  //     } catch (error) {
-  //       console.error("Logout error:", error);
-  //     } finally {
-  //       set({ user: null, loading: false, error: null });
-  //     }
-  //   },
+      // Logout user
+      //   logout: async () => {
+      //     set({ loading: true });
+      //     try {
+      //       await api.post("/auth/logout");
+      //     } catch (error) {
+      //       console.error("Logout error:", error);
+      //     } finally {
+      //       set({ user: null, loading: false, error: null });
+      //     }
+      //   },
 
-  // Clear any errors
-  clearError: () => {
-    set({ error: null });
-  },
-}));
+      // Clear any errors
+      clearError: () => {
+        set({ error: null });
+      },
+    }),
+    {
+      name: "user-storage",
+      storage: createJSONStorage(() => sessionStorage),
+      partialize: (state) => ({ user: state.user }) as Pick<UserState, "user">, // ✅ Fixed type
+    },
+  ),
+);

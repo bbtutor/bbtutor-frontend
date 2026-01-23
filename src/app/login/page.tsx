@@ -12,6 +12,7 @@ import axios from "axios";
 import api from "@/lib/AxiosInstance";
 import { toast } from "sonner";
 import { useUserStore } from "@/store/useUserStore";
+import { useRouter } from "next/navigation";
 
 const loginSchema = z.object({
   email: z
@@ -29,6 +30,7 @@ type LoginFormData = z.infer<typeof loginSchema>;
 function Login() {
   const [isLoading, setIsLoading] = useState(false);
   const [loginError, setLoginError] = useState<string | null>(null);
+  const router = useRouter();
 
   const setUser = useUserStore((state) => state.setUser);
 
@@ -52,18 +54,13 @@ function Login() {
       const response = await api.post("/auth/login", data);
       const user = response.data.user;
 
-      // Add these logs
-      console.log("Login response:", response);
-      console.log("Response headers:", response.headers);
-      console.log("User data:", user);
-
       // Store user in Zustand
       setUser(user);
 
       toast.success("Login successful!");
 
       // Redirect to createLesson page
-      window.location.href = "/createLesson";
+      router.push("/createLesson");
     } catch (error) {
       console.error("Login error:", error);
 
