@@ -1,6 +1,5 @@
 // lib/axiosServerInstance.ts
 import axios from "axios";
-import { cookies } from "next/headers";
 
 const axiosServer = axios.create({
   baseURL: `${process.env.NEXT_PUBLIC_BASEURL}`,
@@ -8,6 +7,7 @@ const axiosServer = axios.create({
   headers: {
     "Content-Type": "application/json",
   },
+  withCredentials: true, // ✅ ADD THIS - Critical for sending cookies cross-origin
 });
 
 // Request interceptor - add auth tokens, API keys, etc.
@@ -18,13 +18,9 @@ axiosServer.interceptors.request.use(
       config.headers["X-API-Key"] = process.env.BACKEND_API_KEY;
     }
 
-    // Get user auth token from cookies (for user-specific requests)
-    const cookieStore = await cookies();
-    const accessToken = cookieStore.get("accessToken")?.value;
-
-    if (accessToken) {
-      config.headers.Authorization = `Bearer ${accessToken}`;
-    }
+    // Note: Don't read cookies here - they should be passed from the API route
+    // The API route will handle reading request cookies and adding Authorization header
+    // This keeps axiosServer clean and reusable
 
     return config;
   },

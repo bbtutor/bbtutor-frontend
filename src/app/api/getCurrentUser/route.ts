@@ -3,39 +3,30 @@ import axiosServer from "@/lib/AxiosServerInstance";
 
 export async function GET(req: NextRequest) {
   try {
-    // Fetch current user from backend
-    // Auth token is automatically added by axiosServer interceptor from cookies
-    console.log(req);
-    const response = await axiosServer.get("/auth/current-user");
+    const accessToken = req.cookies.get("accessToken")?.value;
 
-    // Return user data from backend
-    return NextResponse.json(response.data, { status: 200 });
-  } catch (error: unknown) {
-    console.error("Error fetching current user:", error);
-
-    // Handle axios errors with backend response
-    if (error && typeof error === "object" && "response" in error) {
-      const axiosError = error as {
-        response: {
-          data?: { message?: string };
-          status: number;
-        };
-      };
-
-      return NextResponse.json(
-        {
-          error:
-            axiosError.response.data?.message || "Failed to fetch current user",
-          success: false,
-          user: null,
-        },
-        { status: axiosError.response.status },
-      );
+    if (!accessToken) {
+      return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
     }
 
-    // Handle network errors or other failures
+    // Call a backend endpoint that returns current user info
+    // Ask your backend dev what endpoint returns current user
+    // It might be /api/auth/me or /api/user/profile
+    const response = await axiosServer.get("/auth/current-user", {
+      // ❓ Ask backend dev for this endpoint
+      headers: {
+        Cookie: `accessToken=${accessToken}`,
+      },
+    });
+
+    return NextResponse.json({
+      user: response.data,
+      isAdmin: response.data.user?.role === "admin",
+    });
+  } catch (error) {
+    console.error("Check user error:", error);
     return NextResponse.json(
-      { error: "Failed to fetch current user", success: false, user: null },
+      { error: "Failed to get user info" },
       { status: 500 },
     );
   }

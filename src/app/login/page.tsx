@@ -11,7 +11,6 @@ import { Label } from "@/components/ui/label";
 import axios from "axios";
 import axiosClient from "@/lib/AxiosClientInstance";
 import { toast } from "sonner";
-import { useUserStore } from "@/store/useUserStore";
 import { useRouter } from "next/navigation";
 
 // Zod schema for login form validation
@@ -35,7 +34,6 @@ function Login() {
 
   // Hooks
   const router = useRouter();
-  const setUser = useUserStore((state) => state.setUser);
 
   // React Hook Form setup with Zod validation
   const {
@@ -62,9 +60,9 @@ function Login() {
       // Call Next.js API route for login
       const response = await axiosClient.post("/login", data);
       const user = response.data.user;
+      console.log(user);
 
-      // Store user in Zustand store
-      setUser(user);
+      sessionStorage.setItem("user", JSON.stringify(user));
 
       // Show success notification
       toast.success("Login successful!");

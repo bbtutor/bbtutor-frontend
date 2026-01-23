@@ -9,8 +9,8 @@ import getEmbedUrl from "@/hooks/getEmbedUrl";
 import BuyLessonPopUp from "./BuyLessonPopUp";
 import axiosClient from "@/lib/AxiosClientInstance";
 import { Settings, Edit, Trash2 } from "lucide-react";
-// import { useUserStore } from "@/store/useUserStore";
 import { toast } from "sonner";
+import axios from "axios";
 
 // TypeScript interfaces for type safety
 interface Instructor {
@@ -54,9 +54,6 @@ function MathematicsVideoLesson() {
   const [currentPage, setCurrentPage] = useState(1);
   const lessonsPerPage = 6; // Show 6 lessons per page (2 rows of 3 on desktop)
 
-  // Get current user from Zustand store for role-based UI
-  // const user = useUserStore((state) => state.user);
-
   // Fetch lessons using SWR with pagination
   const {
     data: response,
@@ -94,22 +91,46 @@ function MathematicsVideoLesson() {
      * Calls backend API to delete lesson and refreshes the list
      */
     const handleDelete = async (data: Lesson) => {
+      // Add confirmation dialog
+      const confirmed = window.confirm(
+        `Are you sure you want to delete "${data.title}"? This action cannot be undone.`,
+      );
+
+      if (!confirmed) {
+        return; // User cancelled
+      }
+
       try {
-        // Call backend delete endpoint
+        toast.loading("Deleting lesson...", { id: "delete-lesson" });
+
         await axiosClient.delete(`/deleteLesson/${data._id}`);
 
-        // Show success notification
-        toast.success(data.title + " deleted successfully");
+        toast.success(data.title + " deleted successfully", {
+          id: "delete-lesson",
+        });
 
-        // Revalidate SWR cache to refetch updated data
         mutate();
-      } catch (error) {
-        // Show error notification
-        toast.error("Failed to delete lesson");
+      } catch (error: unknown) {
         console.error("Delete lesson error:", error);
+
+        // Type guard for axios errors
+        if (axios.isAxiosError(error)) {
+          const message =
+            error.response?.data?.error ||
+            error.response?.data?.message ||
+            "Failed to delete lesson";
+          toast.error(message, { id: "delete-lesson" });
+
+          if (error.response?.status === 401) {
+            toast.error("Please login to continue");
+          }
+        } else {
+          toast.error("Failed to delete lesson. Please try again.", {
+            id: "delete-lesson",
+          });
+        }
       }
     };
-
     return (
       <div
         key={lesson._id}

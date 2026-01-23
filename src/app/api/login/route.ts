@@ -2,19 +2,6 @@ import { NextRequest, NextResponse } from "next/server";
 import axiosServer from "@/lib/AxiosServerInstance";
 import { setAuthCookie } from "@/lib/authCookiesHelper";
 
-/**
- * POST /api/login
- * Authenticates user and sets httpOnly cookie with access token
- *
- * Request Body:
- * @param email - User's email address
- * @param password - User's password
- *
- * Returns:
- * @returns {user} - User object with id, name, email, and role
- * @returns {success} - Boolean indicating operation success
- * @returns {message} - Success/error message
- */
 export async function POST(req: NextRequest) {
   try {
     // Parse request body
@@ -41,10 +28,21 @@ export async function POST(req: NextRequest) {
     // Extract access token and user data from backend response
     const { accessToken, user } = response.data;
 
+    if (!accessToken) {
+      console.log("❌ NO ACCESS TOKEN IN RESPONSE!");
+      return NextResponse.json(
+        { error: "Login failed - no token received", success: false },
+        { status: 500 },
+      );
+    }
+
+    console.log("About to set cookie with token length:", accessToken.length);
+
     // Set httpOnly cookie with access token
     await setAuthCookie(accessToken);
 
-    // Return user data (without token for security)
+    console.log("✅ Cookie set");
+
     return NextResponse.json(
       {
         user,

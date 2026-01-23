@@ -3,14 +3,14 @@ import { NextResponse } from "next/server";
 
 export const COOKIE_NAME = "accessToken";
 
-// Cookie options
+// Cookie options - works for both development and production
 const cookieOptions = {
   httpOnly: true,
-  secure: true,
-  sameSite: "none" as const,
-  maxAge: 60 * 60 * 24,
+  secure: process.env.NODE_ENV === "production",
+  sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+  maxAge: 60 * 60 * 24, // 24 hours
   path: "/",
-};
+} as const;
 
 // Server-side: Set auth cookie
 export async function setAuthCookie(token: string) {
