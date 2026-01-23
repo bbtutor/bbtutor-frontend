@@ -7,6 +7,7 @@ import Loader from "../ui/loader";
 import ErrorMessage from "../ui/errorMessage";
 import getEmbedUrl from "@/hooks/getEmbedUrl";
 import BuyLessonPopUp from "./BuyLessonPopUp";
+import DeleteConfirmDialog from "./DeleteConfirmDialog";
 import axiosClient from "@/lib/AxiosClientInstance";
 import { Settings, Edit, Trash2 } from "lucide-react";
 import { toast } from "sonner";
@@ -50,6 +51,12 @@ interface ApiResponse {
 const fetcher = (url: string) => axiosClient.get(url).then((res) => res.data);
 
 function MathematicsVideoLesson() {
+  // State for delete confirmation dialog
+  const [deleteDialog, setDeleteDialog] = useState<{
+    isOpen: boolean;
+    lesson: Lesson | null;
+  }>({ isOpen: false, lesson: null });
+
   // State for pagination
   const [currentPage, setCurrentPage] = useState(1);
   const lessonsPerPage = 6; // Show 6 lessons per page (2 rows of 3 on desktop)
@@ -84,6 +91,45 @@ function MathematicsVideoLesson() {
   const lessons = response?.data || [];
   const pagination = response?.pagination;
 
+  // Confirm delete function (outside map)
+  const confirmDelete = async () => {
+    if (!deleteDialog.lesson) return;
+
+    try {
+      console.log("Deleting lesson with ID:", deleteDialog.lesson._id);
+      console.log("ID type:", typeof deleteDialog.lesson._id);
+      console.log("ID length:", deleteDialog.lesson._id.length);
+      toast.loading("Deleting lesson...", { id: "delete-lesson" });
+
+      await axiosClient.delete(`/deleteLesson/${deleteDialog.lesson._id}`);
+
+      toast.success(deleteDialog.lesson.title + " deleted successfully", {
+        id: "delete-lesson",
+      });
+
+      mutate();
+    } catch (error: unknown) {
+      console.error("Delete lesson error:", error);
+
+      // Type guard for axios errors
+      if (axios.isAxiosError(error)) {
+        const message =
+          error.response?.data?.error ||
+          error.response?.data?.message ||
+          "Failed to delete lesson";
+        toast.error(message, { id: "delete-lesson" });
+
+        if (error.response?.status === 401) {
+          toast.error("Please login to continue");
+        }
+      } else {
+        toast.error("Failed to delete lesson. Please try again.", {
+          id: "delete-lesson",
+        });
+      }
+    }
+  };
+
   // Map through lessons and create display cards
   const displayLessons = lessons.map((lesson) => {
     /**
@@ -91,45 +137,8 @@ function MathematicsVideoLesson() {
      * Calls backend API to delete lesson and refreshes the list
      */
     const handleDelete = async (data: Lesson) => {
-      // Add confirmation dialog
-      const confirmed = window.confirm(
-        `Are you sure you want to delete "${data.title}"? This action cannot be undone.`,
-      );
-
-      if (!confirmed) {
-        return; // User cancelled
-      }
-
-      try {
-        toast.loading("Deleting lesson...", { id: "delete-lesson" });
-
-        await axiosClient.delete(`/deleteLesson/${data._id}`);
-
-        toast.success(data.title + " deleted successfully", {
-          id: "delete-lesson",
-        });
-
-        mutate();
-      } catch (error: unknown) {
-        console.error("Delete lesson error:", error);
-
-        // Type guard for axios errors
-        if (axios.isAxiosError(error)) {
-          const message =
-            error.response?.data?.error ||
-            error.response?.data?.message ||
-            "Failed to delete lesson";
-          toast.error(message, { id: "delete-lesson" });
-
-          if (error.response?.status === 401) {
-            toast.error("Please login to continue");
-          }
-        } else {
-          toast.error("Failed to delete lesson. Please try again.", {
-            id: "delete-lesson",
-          });
-        }
-      }
+      // Open custom confirmation dialog
+      setDeleteDialog({ isOpen: true, lesson: data });
     };
     return (
       <div
@@ -199,7 +208,13 @@ function MathematicsVideoLesson() {
 
                 {/* Delete Button */}
                 <button
-                  onClick={() => handleDelete(lesson)}
+                  onClick={() => {
+                    handleDelete(lesson);
+                    // Close dropdown after action
+                    document
+                      .getElementById(`dropdown-${lesson._id}`)
+                      ?.classList.add("hidden");
+                  }}
                   className="flex items-center cursor-pointer w-full px-3 py-2 text-sm text-red-600 hover:bg-red-50"
                 >
                   <Trash2 className="h-3 w-3 mr-2" />
@@ -308,6 +323,15 @@ function MathematicsVideoLesson() {
           </div>
         </div>
       )}
+
+      {/* Delete Confirmation Dialog */}
+      <DeleteConfirmDialog
+        isOpen={deleteDialog.isOpen}
+        onClose={() => setDeleteDialog({ isOpen: false, lesson: null })}
+        onConfirm={confirmDelete}
+        lessonTitle={deleteDialog.lesson?.title || ""}
+        isLoading={false}
+      />
     </section>
   );
 }

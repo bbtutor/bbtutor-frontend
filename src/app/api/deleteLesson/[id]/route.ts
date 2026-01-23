@@ -1,9 +1,9 @@
-import { NextRequest, NextResponse } from "next/server";
 import axiosServer from "@/lib/AxiosServerInstance";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { id: string } },
+  { params }: { params: Promise<{ id: string }> }, // ✅ Changed type
 ) {
   try {
     // ✅ Read access token from cookies
@@ -19,7 +19,10 @@ export async function DELETE(
       );
     }
 
-    const { id } = params; // Gets from /api/deleteLesson/123
+    const { id } = await params; // ✅ AWAIT params here
+
+    console.log("Received ID in API route:", id);
+    console.log("ID type:", typeof id);
 
     // ✅ Pass cookie to backend
     const response = await axiosServer.delete(`/lesson/delete-lesson/${id}`, {
@@ -39,7 +42,6 @@ export async function DELETE(
   } catch (error: unknown) {
     console.error("Error deleting lesson:", error);
 
-    // ✅ Handle axios errors properly
     if (error && typeof error === "object" && "response" in error) {
       const axiosError = error as {
         response: {
