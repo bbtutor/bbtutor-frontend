@@ -133,8 +133,6 @@ function CreateLessonpage() {
         price: parseFloat(data.price),
       };
 
-      console.log("Creating lesson:", submissionData);
-
       // Show loading spinner while processing
       toast.loading("Creating lesson...", { id: "create-lesson" });
 
@@ -153,8 +151,6 @@ function CreateLessonpage() {
       setValue("lessonsCovered", []);
       setLessonsInput("");
     } catch (error) {
-      console.error("Error creating lesson:", error);
-
       if (axios.isAxiosError(error)) {
         const message =
           error.response?.data?.message || "Failed to create lesson";

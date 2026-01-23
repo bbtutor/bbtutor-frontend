@@ -49,13 +49,8 @@ function Login() {
 
     try {
       const response = await api.post("/auth/login", data);
-      const user = response.data.user;
 
-      // Store accessToken in cookies for middleware access
-      document.cookie = `accessToken=${response.data.accessToken}; path=/; max-age=${60 * 60 * 24}`; // 1 day
-
-      // Store user data in localStorage
-      localStorage.setItem("user", JSON.stringify(user));
+      console.log(response.data.status);
 
       toast.success("Login successful!");
 

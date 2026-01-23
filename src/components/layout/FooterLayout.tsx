@@ -48,7 +48,7 @@ function FooterLayout() {
               href="/createLesson"
               className="hover:text-primary transition-colors"
             >
-              Create Leasson
+              Create Lesson
             </Link>
           </ul>
         </div>

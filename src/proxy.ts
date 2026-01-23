@@ -4,26 +4,30 @@ import type { NextRequest } from "next/server";
 export function proxy(request: NextRequest) {
   // Get the accessToken from cookies
   const accessToken = request.cookies.get("accessToken");
+  const { pathname } = request.nextUrl;
 
-  // Define protected routes
+  // Define route types
   const protectedRoutes = ["/createLesson"];
+  const authRoutes = ["/login", "/register"];
 
-  // Check if current path is protected
   const isProtectedRoute = protectedRoutes.some((route) =>
-    request.nextUrl.pathname.startsWith(route),
+    pathname.startsWith(route),
   );
+  const isAuthRoute = authRoutes.includes(pathname);
 
-  // If route is protected and no token, redirect to login
+  // Redirect unauthenticated users away from protected routes
   if (isProtectedRoute && !accessToken) {
     const loginUrl = new URL("/login", request.url);
-    // redirect query param to return user after login
-    loginUrl.searchParams.set("redirect", request.nextUrl.pathname);
+    loginUrl.searchParams.set("redirect", pathname);
     return NextResponse.redirect(loginUrl);
   }
 
-  // If user is logged in and tries to access login page
-  if (accessToken && request.nextUrl.pathname === "/login") {
-    return NextResponse.redirect(new URL("/createLesson", request.url));
+  // Redirect authenticated users away from auth pages
+  if (isAuthRoute && accessToken) {
+    // Check if there's a redirect parameter
+    const redirect = request.nextUrl.searchParams.get("redirect");
+    const redirectUrl = redirect || "/createLesson";
+    return NextResponse.redirect(new URL(redirectUrl, request.url));
   }
 
   // Allow request to proceed
@@ -39,7 +43,8 @@ export const config = {
      * - _next/image (image optimization files)
      * - favicon.ico (favicon file)
      * - public folder
+     * - api routes (optional, if you want to exclude them)
      */
-    "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
+    "/((?!_next/static|_next/image|favicon.ico|api|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
   ],
 };
