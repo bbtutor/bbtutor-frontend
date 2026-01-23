@@ -1,7 +1,6 @@
 "use client";
 import Title from "../ui/title";
 import Paragraph from "../ui/paragraph";
-import axios from "axios";
 import useSWR from "swr";
 import { useState } from "react";
 import Loader from "../ui/loader";
@@ -9,6 +8,9 @@ import ErrorMessage from "../ui/errorMessage";
 import getEmbedUrl from "@/hooks/getEmbedUrl";
 import BuyLessonPopUp from "./BuyLessonPopUp";
 import api from "@/lib/AxiosInstance";
+import { Settings, Edit, Trash2 } from "lucide-react";
+import { useUserStore } from "@/store/useUserStore";
+import { toast } from "sonner";
 
 interface Instructor {
   _id: string;
@@ -48,11 +50,13 @@ const fetcher = (url: string) => api.get(url).then((res) => res.data);
 function MathematicsVideoLesson() {
   const [currentPage, setCurrentPage] = useState(1);
   const lessonsPerPage = 6; // Show 6 lessons per page (2 rows of 3 on desktop)
+  const user = useUserStore((state) => state.user);
 
   const {
     data: response,
     error,
     isLoading,
+    mutate,
   } = useSWR<ApiResponse>(
     `${process.env.NEXT_PUBLIC_BASEURL}/lesson/get-lessons?page=${currentPage}&limit=${lessonsPerPage}`,
     fetcher,
@@ -75,6 +79,21 @@ function MathematicsVideoLesson() {
   const pagination = response?.pagination;
 
   const displayLessons = lessons.map((lesson) => {
+    const handleDelete = async (data: Lesson) => {
+      try {
+        await api.delete(
+          `${process.env.NEXT_PUBLIC_BASEURL}/lesson/delete-lesson/${data._id}`,
+        );
+
+        toast.success(data.title + " deleted successfully");
+
+        // ✅ Revalidate SWR cache to refetch data
+        mutate();
+      } catch (error) {
+        toast.error("Failed to delete lesson");
+        console.log(error);
+      }
+    };
     return (
       <div
         key={lesson._id}
@@ -90,13 +109,64 @@ function MathematicsVideoLesson() {
           ></iframe>
         </div>
 
-        <div>
-          <h3 className="text-lg text-bassey-nuetral-900 font-semibold">
-            {lesson.title}
-          </h3>
-          <p className="text-sm mt-0.5 text-bassey-black-500">
-            {lesson.description}
-          </p>
+        <div className="flex items-start justify-between">
+          <div className="flex-1">
+            <h3 className="text-lg text-bassey-nuetral-900 font-semibold">
+              {lesson.title}
+            </h3>
+            <p className="text-sm mt-0.5 text-bassey-black-500">
+              {lesson.description}
+            </p>
+          </div>
+
+          {/* Gear Icon with Dropdown */}
+          {user?.role === "admin" && (
+            <div className="relative">
+              <button
+                onClick={() => {
+                  // Toggle dropdown for this specific lesson
+                  const dropdownId = `dropdown-${lesson._id}`;
+                  const dropdown = document.getElementById(dropdownId);
+                  if (dropdown) {
+                    dropdown.classList.toggle("hidden");
+                  }
+                }}
+                className="p-1 hover:bg-gray-100 rounded-md transition-colors cursor-pointer"
+              >
+                <Settings className="h-4 w-4 text-gray-600" />
+              </button>
+
+              {/* Dropdown Menu */}
+              <div
+                id={`dropdown-${lesson._id}`}
+                className="hidden absolute right-0 mt-1 w-32 bg-white border border-gray-200 rounded-md shadow-lg z-10"
+              >
+                <div className="py-1">
+                  <button
+                    onClick={() => {
+                      // Handle update
+                      console.log("Update lesson:", lesson._id);
+                      // Close dropdown
+                      document
+                        .getElementById(`dropdown-${lesson._id}`)
+                        ?.classList.add("hidden");
+                    }}
+                    className="flex items-center w-full px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
+                  >
+                    <Edit className="h-3 w-3 mr-2" />
+                    Update
+                  </button>
+                  <button
+                    onClick={() => handleDelete(lesson)}
+                    className="flex items-center cursor-pointer w-full px-3 py-2 text-sm text-red-600 hover:bg-red-50"
+                  >
+                    <Trash2 className="h-3 w-3 mr-2" />
+                    Delete
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
 
         <div className="flex items-center justify-between text-xs leading-4.5 text-[#9C9898]">
