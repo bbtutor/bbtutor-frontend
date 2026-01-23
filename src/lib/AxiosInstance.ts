@@ -1,7 +1,9 @@
+// lib/AxiosInstance.ts
 import axios from "axios";
+import { useUserStore } from "@/store/useUserStore";
 
 const api = axios.create({
-  baseURL: `${process.env.NEXT_PUBLIC_BASEURL}`,
+  baseURL: process.env.NEXT_PUBLIC_BASEURL,
   withCredentials: true,
 });
 
@@ -10,13 +12,14 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      // Token expired or invalid
       if (typeof window !== "undefined") {
-        // Clear user data from localStorage
-        localStorage.removeItem("user");
+        // Clear user from Zustand store
+        useUserStore.getState().setUser(null);
 
-        // Redirect to login
-        window.location.href = "/login";
+        // Only redirect if not already on login page to prevent infinite loops
+        if (!window.location.pathname.includes("/login")) {
+          window.location.href = "/login";
+        }
       }
     }
     return Promise.reject(error);

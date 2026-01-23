@@ -9,9 +9,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import axios from "axios";
-import { useRouter } from "next/navigation";
 import api from "@/lib/AxiosInstance";
 import { toast } from "sonner";
+import { useUserStore } from "@/store/useUserStore";
 
 const loginSchema = z.object({
   email: z
@@ -29,7 +29,8 @@ type LoginFormData = z.infer<typeof loginSchema>;
 function Login() {
   const [isLoading, setIsLoading] = useState(false);
   const [loginError, setLoginError] = useState<string | null>(null);
-  const router = useRouter();
+
+  const setUser = useUserStore((state) => state.setUser);
 
   const {
     register,
@@ -49,15 +50,20 @@ function Login() {
 
     try {
       const response = await api.post("/auth/login", data);
+      const user = response.data.user;
 
-      console.log(response.data.status);
+      // Add these logs
+      console.log("Login response:", response);
+      console.log("Response headers:", response.headers);
+      console.log("User data:", user);
+
+      // Store user in Zustand
+      setUser(user);
 
       toast.success("Login successful!");
 
-      // Small delay for better UX
-      setTimeout(() => {
-        router.push("/createLesson");
-      }, 500);
+      // Redirect to createLesson page
+      window.location.href = "/createLesson";
     } catch (error) {
       console.error("Login error:", error);
 
@@ -100,15 +106,15 @@ function Login() {
             onSubmit={handleSubmit(onSubmit)}
             className="space-y-5 sm:space-y-6"
           >
+            {/* Login Error Message */}
+            {loginError && (
+              <div className="bg-red-50 border border-red-200 rounded-lg p-3">
+                <p className="text-sm text-red-600">{loginError}</p>
+              </div>
+            )}
+
             {/* Email Field */}
             <div className="space-y-3">
-              {/* Login Error Message */}
-              {loginError && (
-                <div className="bg-red-50 border border-red-200 rounded-lg p-3">
-                  <p className="text-sm text-red-600">{loginError}</p>
-                </div>
-              )}
-
               <Label htmlFor="email" className="text-sm sm:text-base">
                 Email Address
               </Label>
