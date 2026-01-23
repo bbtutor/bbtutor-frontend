@@ -7,11 +7,12 @@ import Loader from "../ui/loader";
 import ErrorMessage from "../ui/errorMessage";
 import getEmbedUrl from "@/hooks/getEmbedUrl";
 import BuyLessonPopUp from "./BuyLessonPopUp";
-import api from "@/lib/AxiosInstance";
+import axiosClient from "@/lib/AxiosClientInstance";
 import { Settings, Edit, Trash2 } from "lucide-react";
-import { useUserStore } from "@/store/useUserStore";
+// import { useUserStore } from "@/store/useUserStore";
 import { toast } from "sonner";
 
+// TypeScript interfaces for type safety
 interface Instructor {
   _id: string;
   name: string;
@@ -45,61 +46,76 @@ interface ApiResponse {
   success: boolean;
 }
 
-const fetcher = (url: string) => api.get(url).then((res) => res.data);
+// SWR fetcher function - fetches data from Next.js API route
+const fetcher = (url: string) => axiosClient.get(url).then((res) => res.data);
 
 function MathematicsVideoLesson() {
+  // State for pagination
   const [currentPage, setCurrentPage] = useState(1);
   const lessonsPerPage = 6; // Show 6 lessons per page (2 rows of 3 on desktop)
-  const user = useUserStore((state) => state.user);
 
+  // Get current user from Zustand store for role-based UI
+  // const user = useUserStore((state) => state.user);
+
+  // Fetch lessons using SWR with pagination
   const {
     data: response,
     error,
     isLoading,
     mutate,
   } = useSWR<ApiResponse>(
-    `${process.env.NEXT_PUBLIC_BASEURL}/lesson/get-lessons?page=${currentPage}&limit=${lessonsPerPage}`,
+    `/getVideoLessons?page=${currentPage}&limit=${lessonsPerPage}`,
     fetcher,
     {
-      revalidateOnFocus: false,
-      revalidateOnReconnect: false,
-      dedupingInterval: 5_000, // 5 seconds
+      revalidateOnFocus: false, // Don't refetch on window focus
+      revalidateOnReconnect: false, // Don't refetch on reconnect
+      dedupingInterval: 5_000, // Dedupe requests within 5 seconds
     },
   );
 
+  // Show loader while fetching initial data
   if (isLoading) {
     return <Loader />;
   }
 
+  // Show error message if fetch fails
   if (error) {
     return <ErrorMessage error={error} />;
   }
 
+  // Extract lessons and pagination data from response
   const lessons = response?.data || [];
   const pagination = response?.pagination;
 
+  // Map through lessons and create display cards
   const displayLessons = lessons.map((lesson) => {
+    /**
+     * Delete lesson handler (Admin only)
+     * Calls backend API to delete lesson and refreshes the list
+     */
     const handleDelete = async (data: Lesson) => {
       try {
-        await api.delete(
-          `${process.env.NEXT_PUBLIC_BASEURL}/lesson/delete-lesson/${data._id}`,
-        );
+        // Call backend delete endpoint
+        await axiosClient.delete(`/deleteLesson/${data._id}`);
 
+        // Show success notification
         toast.success(data.title + " deleted successfully");
 
-        // ✅ Revalidate SWR cache to refetch data
+        // Revalidate SWR cache to refetch updated data
         mutate();
       } catch (error) {
+        // Show error notification
         toast.error("Failed to delete lesson");
-        console.log(error);
+        console.error("Delete lesson error:", error);
       }
     };
+
     return (
       <div
         key={lesson._id}
         className="border border-primary rounded-2xl pt-3 px-3 flex flex-col gap-4"
       >
-        {/* YouTube Video */}
+        {/* YouTube Video Embed */}
         <div className="relative w-full pb-[56.25%] bg-black rounded-xl overflow-hidden">
           <iframe
             className="absolute top-0 left-0 w-full h-full"
@@ -109,6 +125,7 @@ function MathematicsVideoLesson() {
           ></iframe>
         </div>
 
+        {/* Lesson Title, Description, and Admin Actions */}
         <div className="flex items-start justify-between">
           <div className="flex-1">
             <h3 className="text-lg text-bassey-nuetral-900 font-semibold">
@@ -119,61 +136,66 @@ function MathematicsVideoLesson() {
             </p>
           </div>
 
-          {/* Gear Icon with Dropdown */}
-          {user?.role === "admin" && (
-            <div className="relative">
-              <button
-                onClick={() => {
-                  // Toggle dropdown for this specific lesson
-                  const dropdownId = `dropdown-${lesson._id}`;
-                  const dropdown = document.getElementById(dropdownId);
-                  if (dropdown) {
-                    dropdown.classList.toggle("hidden");
-                  }
-                }}
-                className="p-1 hover:bg-gray-100 rounded-md transition-colors cursor-pointer"
-              >
-                <Settings className="h-4 w-4 text-gray-600" />
-              </button>
+          {/* Admin Controls - Settings Dropdown */}
 
-              {/* Dropdown Menu */}
-              <div
-                id={`dropdown-${lesson._id}`}
-                className="hidden absolute right-0 mt-1 w-32 bg-white border border-gray-200 rounded-md shadow-lg z-10"
-              >
-                <div className="py-1">
-                  <button
-                    onClick={() => {
-                      // Handle update
-                      console.log("Update lesson:", lesson._id);
-                      // Close dropdown
-                      document
-                        .getElementById(`dropdown-${lesson._id}`)
-                        ?.classList.add("hidden");
-                    }}
-                    className="flex items-center w-full px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
-                  >
-                    <Edit className="h-3 w-3 mr-2" />
-                    Update
-                  </button>
-                  <button
-                    onClick={() => handleDelete(lesson)}
-                    className="flex items-center cursor-pointer w-full px-3 py-2 text-sm text-red-600 hover:bg-red-50"
-                  >
-                    <Trash2 className="h-3 w-3 mr-2" />
-                    Delete
-                  </button>
-                </div>
+          <div className="relative">
+            <button
+              onClick={() => {
+                // Toggle dropdown visibility for this specific lesson
+                const dropdownId = `dropdown-${lesson._id}`;
+                const dropdown = document.getElementById(dropdownId);
+                if (dropdown) {
+                  dropdown.classList.toggle("hidden");
+                }
+              }}
+              className="p-1 hover:bg-gray-100 rounded-md transition-colors cursor-pointer"
+              aria-label="Lesson settings"
+            >
+              <Settings className="h-4 w-4 text-gray-600" />
+            </button>
+
+            {/* Dropdown Menu with Update and Delete options */}
+            <div
+              id={`dropdown-${lesson._id}`}
+              className="hidden absolute right-0 mt-1 w-32 bg-white border border-gray-200 rounded-md shadow-lg z-10"
+            >
+              <div className="py-1">
+                {/* Update Button */}
+                <button
+                  onClick={() => {
+                    // TODO: Implement update functionality
+                    console.log("Update lesson:", lesson._id);
+                    // Close dropdown after action
+                    document
+                      .getElementById(`dropdown-${lesson._id}`)
+                      ?.classList.add("hidden");
+                  }}
+                  className="flex items-center w-full px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
+                >
+                  <Edit className="h-3 w-3 mr-2" />
+                  Update
+                </button>
+
+                {/* Delete Button */}
+                <button
+                  onClick={() => handleDelete(lesson)}
+                  className="flex items-center cursor-pointer w-full px-3 py-2 text-sm text-red-600 hover:bg-red-50"
+                >
+                  <Trash2 className="h-3 w-3 mr-2" />
+                  Delete
+                </button>
               </div>
             </div>
-          )}
+          </div>
         </div>
 
+        {/* Lesson Tag and Topics Info */}
         <div className="flex items-center justify-between text-xs leading-4.5 text-[#9C9898]">
           <p className="font-bold">{lesson.tag}</p>
           <p>All topics covered</p>
         </div>
 
+        {/* Lesson Fee Display */}
         <div className="rounded-md flex items-center justify-between py-1.75 px-4 bg-[#CCE0F0]">
           <p className="text-xs font-light">Lesson Fee</p>
           <p className="bg-[#D0AA12] text-primary rounded-xl py-1.5 px-3 font-bold">
@@ -181,23 +203,24 @@ function MathematicsVideoLesson() {
           </p>
         </div>
 
+        {/* Topics Covered Section Header */}
         <div>
-          <p className="text-bassey-nuetral-900 text-[13px] ">
-            Topics Covered:
-          </p>
+          <p className="text-bassey-nuetral-900 text-[13px]">Topics Covered:</p>
         </div>
 
+        {/* Topics Covered List */}
         <ul className="flex flex-wrap gap-3">
-          {lesson.lessonsCovered.map((lesson) => (
+          {lesson.lessonsCovered.map((topic) => (
             <li
               className="py-0.5 px-2 bg-[#F4F2F2] rounded-2xl font-light text-[10px]"
-              key={lesson}
+              key={topic}
             >
-              {lesson}
+              {topic}
             </li>
           ))}
         </ul>
 
+        {/* Buy Lesson Button/Popup */}
         <BuyLessonPopUp
           lessonTitle={lesson.title}
           paymentLink={lesson.paymentLink}
@@ -208,20 +231,23 @@ function MathematicsVideoLesson() {
 
   return (
     <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 py-20">
+      {/* Section Header */}
       <Title text="Mathematics Video Lessons" center />
       <Paragraph
         text="Comprehensive mathematics tutoring from Primary 1 through Senior Secondary 3, with specialized preparation for WAEC, NECO, and IGCSE examinations."
         center
       />
 
+      {/* Lessons Grid - Responsive layout */}
       <div className="mt-12 sm:mt-16 lg:mt-20 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-20">
         {displayLessons}
       </div>
 
-      {/* Pagination Controls */}
+      {/* Pagination Controls - Only show if more than 1 page */}
       {pagination && pagination.totalPages > 1 && (
         <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
           <div className="flex items-center gap-2">
+            {/* Previous Page Button */}
             <button
               onClick={() => setCurrentPage(currentPage - 1)}
               disabled={currentPage === 1}
@@ -230,6 +256,7 @@ function MathematicsVideoLesson() {
               Previous
             </button>
 
+            {/* Page Number Buttons */}
             <div className="flex items-center gap-1">
               {Array.from(
                 { length: pagination.totalPages },
@@ -249,6 +276,7 @@ function MathematicsVideoLesson() {
               ))}
             </div>
 
+            {/* Next Page Button */}
             <button
               onClick={() => setCurrentPage(currentPage + 1)}
               disabled={currentPage === pagination.totalPages}

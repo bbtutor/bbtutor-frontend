@@ -4,7 +4,6 @@ import "./globals.css";
 import HeaderLayout from "@/components/layout/HeaderLayout";
 import FooterLayout from "@/components/layout/FooterLayout";
 import { Toaster } from "@/components/ui/sonner";
-import { AuthProvider } from "@/components/providers/AuthProvider";
 
 const poppins = Poppins({
   // Import poppins font
@@ -40,11 +39,9 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${poppins.className} antialiased min-h-screen w-full`}>
         <Toaster position="top-center" />
-        <AuthProvider>
-          <HeaderLayout />
-          <main className="min-h-screen">{children}</main>
-          <FooterLayout />
-        </AuthProvider>
+        <HeaderLayout />
+        <main className="min-h-screen">{children}</main>
+        <FooterLayout />
       </body>
     </html>
   );

@@ -1,10 +1,10 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import { useUserStore } from "@/store/useUserStore";
+// import { useUserStore } from "@/store/useUserStore";
 
 function FooterLayout() {
-  const user = useUserStore((state) => state.user);
+  // const user = useUserStore((state) => state.user);
 
   return (
     <footer className="min-h-100.25 py-12.5 border-t-2 border-primary max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
@@ -48,14 +48,13 @@ function FooterLayout() {
             >
               Admin Login
             </Link>
-            {user?.role === "admin" && (
-              <Link
-                href="/createLesson"
-                className="hover:text-primary transition-colors"
-              >
-                Create Lesson
-              </Link>
-            )}
+
+            <Link
+              href="/createLesson"
+              className="hover:text-primary transition-colors"
+            >
+              Create Lesson
+            </Link>
           </ul>
         </div>
 
