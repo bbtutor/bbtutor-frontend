@@ -1,5 +1,4 @@
 "use client";
-
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -12,6 +11,7 @@ import axios from "axios";
 import axiosClient from "@/lib/AxiosClientInstance";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { useUserStore } from "@/store/useUserStore";
 
 // Zod schema for login form validation
 const loginSchema = z.object({
@@ -31,6 +31,7 @@ function Login() {
   // State management
   const [isLoading, setIsLoading] = useState(false);
   const [loginError, setLoginError] = useState<string | null>(null);
+  const setUser = useUserStore((state) => state.setUser);
 
   // Hooks
   const router = useRouter();
@@ -62,7 +63,7 @@ function Login() {
       const user = response.data.user;
       console.log(user);
 
-      sessionStorage.setItem("user", JSON.stringify(user));
+      setUser(user);
 
       // Show success notification
       toast.success("Login successful!");

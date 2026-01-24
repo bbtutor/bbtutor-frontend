@@ -8,8 +8,9 @@ import ErrorMessage from "../ui/errorMessage";
 import getEmbedUrl from "@/hooks/getEmbedUrl";
 import BuyLessonPopUp from "./BuyLessonPopUp";
 import DeleteConfirmDialog from "./DeleteConfirmDialog";
+import { useUserStore } from "@/store/useUserStore";
 import axiosClient from "@/lib/AxiosClientInstance";
-import { Settings, Edit, Trash2 } from "lucide-react";
+import { Settings, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import axios from "axios";
 
@@ -51,6 +52,9 @@ interface ApiResponse {
 const fetcher = (url: string) => axiosClient.get(url).then((res) => res.data);
 
 function MathematicsVideoLesson() {
+  // Get user from store to check admin role
+  const user = useUserStore((state) => state.user);
+
   // State for delete confirmation dialog
   const [deleteDialog, setDeleteDialog] = useState<{
     isOpen: boolean;
@@ -96,11 +100,6 @@ function MathematicsVideoLesson() {
     if (!deleteDialog.lesson) return;
 
     try {
-      console.log("Deleting lesson with ID:", deleteDialog.lesson._id);
-      console.log("ID type:", typeof deleteDialog.lesson._id);
-      console.log("ID length:", deleteDialog.lesson._id.length);
-      toast.loading("Deleting lesson...", { id: "delete-lesson" });
-
       await axiosClient.delete(`/deleteLesson/${deleteDialog.lesson._id}`);
 
       toast.success(deleteDialog.lesson.title + " deleted successfully", {
@@ -167,62 +166,48 @@ function MathematicsVideoLesson() {
           </div>
 
           {/* Admin Controls - Settings Dropdown */}
+          {/* Only show for admin users */}
+          {user?.role === "admin" && (
+            <div className="relative">
+              <button
+                onClick={() => {
+                  // Toggle dropdown visibility for this specific lesson
+                  const dropdownId = `dropdown-${lesson._id}`;
+                  const dropdown = document.getElementById(dropdownId);
+                  if (dropdown) {
+                    dropdown.classList.toggle("hidden");
+                  }
+                }}
+                className="p-1 hover:bg-gray-100 rounded-md transition-colors cursor-pointer"
+                aria-label="Lesson settings"
+              >
+                <Settings className="h-4 w-4 text-gray-600" />
+              </button>
 
-          <div className="relative">
-            <button
-              onClick={() => {
-                // Toggle dropdown visibility for this specific lesson
-                const dropdownId = `dropdown-${lesson._id}`;
-                const dropdown = document.getElementById(dropdownId);
-                if (dropdown) {
-                  dropdown.classList.toggle("hidden");
-                }
-              }}
-              className="p-1 hover:bg-gray-100 rounded-md transition-colors cursor-pointer"
-              aria-label="Lesson settings"
-            >
-              <Settings className="h-4 w-4 text-gray-600" />
-            </button>
-
-            {/* Dropdown Menu with Update and Delete options */}
-            <div
-              id={`dropdown-${lesson._id}`}
-              className="hidden absolute right-0 mt-1 w-32 bg-white border border-gray-200 rounded-md shadow-lg z-10"
-            >
-              <div className="py-1">
-                {/* Update Button */}
-                <button
-                  onClick={() => {
-                    // TODO: Implement update functionality
-                    console.log("Update lesson:", lesson._id);
-                    // Close dropdown after action
-                    document
-                      .getElementById(`dropdown-${lesson._id}`)
-                      ?.classList.add("hidden");
-                  }}
-                  className="flex items-center w-full px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
-                >
-                  <Edit className="h-3 w-3 mr-2" />
-                  Update
-                </button>
-
-                {/* Delete Button */}
-                <button
-                  onClick={() => {
-                    handleDelete(lesson);
-                    // Close dropdown after action
-                    document
-                      .getElementById(`dropdown-${lesson._id}`)
-                      ?.classList.add("hidden");
-                  }}
-                  className="flex items-center cursor-pointer w-full px-3 py-2 text-sm text-red-600 hover:bg-red-50"
-                >
-                  <Trash2 className="h-3 w-3 mr-2" />
-                  Delete
-                </button>
+              {/* Dropdown Menu with Delete option only */}
+              <div
+                id={`dropdown-${lesson._id}`}
+                className="hidden absolute right-0 mt-1 w-32 bg-white border border-gray-200 rounded-md shadow-lg z-10"
+              >
+                <div className="py-1">
+                  {/* Delete Button */}
+                  <button
+                    onClick={() => {
+                      handleDelete(lesson);
+                      // Close dropdown after action
+                      document
+                        .getElementById(`dropdown-${lesson._id}`)
+                        ?.classList.add("hidden");
+                    }}
+                    className="flex items-center cursor-pointer w-full px-3 py-2 text-sm text-red-600 hover:bg-red-50"
+                  >
+                    <Trash2 className="h-3 w-3 mr-2" />
+                    Delete
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
+          )}
         </div>
 
         {/* Lesson Tag and Topics Info */}
