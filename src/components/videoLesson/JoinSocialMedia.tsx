@@ -75,13 +75,13 @@ function JoinSocialMedia() {
 
           <aside>
             <p className="font-bold text-white leading-6">
-              <span className="hidden sm:block text-xs sm:text-sm lg:text-base">
+              <span className="block text-xs sm:text-sm lg:text-base">
                 JOIN OUR FREE{" "}
               </span>
-              <span className="hidden sm:block text-[10px] sm:text-xs lg:text-sm">
+              <span className="block text-[10px] sm:text-xs lg:text-sm">
                 Learning groups!
               </span>
-              <span className="hidden sm:block text-[7px] sm:text-[8px] lg:text-[10px] font-normal">
+              <span className="block text-[7px] sm:text-[8px] lg:text-[10px] font-normal">
                 WhatsApp & Telegram
               </span>
             </p>
