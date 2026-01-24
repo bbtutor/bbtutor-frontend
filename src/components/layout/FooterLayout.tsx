@@ -48,6 +48,8 @@ function FooterLayout() {
             >
               Admin Login
             </Link>
+
+            {/* Only show for admin users */}
             {user?.role === "admin" && (
               <Link
                 href="/createLesson"

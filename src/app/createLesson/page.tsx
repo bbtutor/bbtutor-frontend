@@ -19,12 +19,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
-import api from "@/lib/AxiosInstance";
+import axiosClient from "@/lib/AxiosClientInstance";
 import axios from "axios";
-import { useEffect } from "react";
-import { useUserStore } from "@/store/useUserStore";
-import { useRouter } from "next/navigation";
 
+// Zod schema for create lesson form validation
 const createLessonSchema = z.object({
   title: z
     .string()
@@ -71,12 +69,11 @@ const createLessonSchema = z.object({
 type CreateLessonFormData = z.infer<typeof createLessonSchema>;
 
 function CreateLessonpage() {
+  // State management
   const [isLoading, setIsLoading] = useState(false);
   const [lessonsInput, setLessonsInput] = useState("");
-  const [isHydrated, setIsHydrated] = useState(false);
-  const user = useUserStore((state) => state.user);
-  const router = useRouter();
 
+  // React Hook Form setup with Zod validation
   const {
     register,
     handleSubmit,
@@ -96,8 +93,14 @@ function CreateLessonpage() {
     },
   });
 
+  // Watch lessonsCovered array for real-time updates
   const lessonsCovered = watch("lessonsCovered");
 
+  /**
+   * Add lesson topics to the lessonsCovered array
+   * Supports comma-separated input for bulk adding
+   * Respects the maximum limit of 10 lessons
+   */
   const addLesson = () => {
     if (lessonsInput.trim() && lessonsCovered.length < 10) {
       // Split by comma and filter out empty strings
@@ -124,50 +127,33 @@ function CreateLessonpage() {
     }
   };
 
+  /**
+   * Remove a lesson topic from the lessonsCovered array
+   * @param index - Index of the lesson to remove
+   */
   const removeLesson = (index: number) => {
     const updatedLessons = lessonsCovered.filter((_, i) => i !== index);
     setValue("lessonsCovered", updatedLessons);
   };
 
-  useEffect(() => {
-    setIsHydrated(true);
-  }, []);
-
-  // ✅ Only check auth after hydration
-  useEffect(() => {
-    if (isHydrated && !user) {
-      router.push("/login");
-    }
-  }, [user, router, isHydrated]);
-
-  // ✅ Show loading while hydrating
-  if (!isHydrated || !user) {
-    return (
-      <div className="min-h-screen flex items-center justify-center gradient-bg">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
-      </div>
-    );
-  }
-
+  /**
+   * Handle form submission
+   * Calls Next.js API route to create lesson
+   */
   const onSubmit = async (data: CreateLessonFormData) => {
     setIsLoading(true);
 
     try {
-      // Convert price string to number for API
-      const submissionData = {
-        ...data,
-        price: parseFloat(data.price),
-      };
-
-      // Show loading spinner while processing
+      // Show loading toast
       toast.loading("Creating lesson...", { id: "create-lesson" });
 
-      const response = await api.post("/lesson/create-lesson", submissionData);
-      console.log(response.data);
+      // Call Next.js API route for creating lesson
+      await axiosClient.post("/createLesson", data);
 
+      // Show success notification
       toast.success("Lesson created successfully!", { id: "create-lesson" });
 
-      // Reset form
+      // Reset form to initial state
       setValue("title", "");
       setValue("description", "");
       setValue("price", "");
@@ -176,10 +162,18 @@ function CreateLessonpage() {
       setValue("tag", "");
       setValue("lessonsCovered", []);
       setLessonsInput("");
+
+      // Optional: Redirect to lessons page or stay on form
+      // router.push("/lessons");
     } catch (error) {
+      console.error("Create lesson error:", error);
+
+      // Handle different error types
       if (axios.isAxiosError(error)) {
         const message =
-          error.response?.data?.message || "Failed to create lesson";
+          error.response?.data?.message ||
+          error.response?.data?.error ||
+          "Failed to create lesson";
         toast.error(message, { id: "create-lesson" });
       } else {
         toast.error("An unexpected error occurred", { id: "create-lesson" });
@@ -378,7 +372,7 @@ function CreateLessonpage() {
                 Lessons Covered
               </Label>
 
-              {/* Input for adding new lesson */}
+              {/* Input for adding new lesson topics */}
               <div className="flex gap-2">
                 <Input
                   type="text"
@@ -403,7 +397,7 @@ function CreateLessonpage() {
                 </Button>
               </div>
 
-              {/* Display added lessons */}
+              {/* Display added lesson topics */}
               {lessonsCovered.length > 0 && (
                 <div className="space-y-2">
                   {lessonsCovered.map((lesson, index) => (

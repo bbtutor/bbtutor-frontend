@@ -1,5 +1,4 @@
 "use client";
-
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -9,11 +8,12 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import axios from "axios";
-import api from "@/lib/AxiosInstance";
+import axiosClient from "@/lib/AxiosClientInstance";
 import { toast } from "sonner";
-import { useUserStore } from "@/store/useUserStore";
 import { useRouter } from "next/navigation";
+import { useUserStore } from "@/store/useUserStore";
 
+// Zod schema for login form validation
 const loginSchema = z.object({
   email: z
     .string()
@@ -28,12 +28,15 @@ const loginSchema = z.object({
 type LoginFormData = z.infer<typeof loginSchema>;
 
 function Login() {
+  // State management
   const [isLoading, setIsLoading] = useState(false);
   const [loginError, setLoginError] = useState<string | null>(null);
-  const router = useRouter();
-
   const setUser = useUserStore((state) => state.setUser);
 
+  // Hooks
+  const router = useRouter();
+
+  // React Hook Form setup with Zod validation
   const {
     register,
     handleSubmit,
@@ -46,17 +49,23 @@ function Login() {
     },
   });
 
+  /**
+   * Handle login form submission
+   * Calls login API, stores user data, and redirects on success
+   */
   const onSubmit = async (data: LoginFormData) => {
     setIsLoading(true);
     setLoginError(null);
 
     try {
-      const response = await api.post("/auth/login", data);
+      // Call Next.js API route for login
+      const response = await axiosClient.post("/login", data);
       const user = response.data.user;
+      console.log(user);
 
-      // Store user in Zustand
       setUser(user);
 
+      // Show success notification
       toast.success("Login successful!");
 
       // Redirect to createLesson page
@@ -64,24 +73,33 @@ function Login() {
     } catch (error) {
       console.error("Login error:", error);
 
+      // Handle different error types
       if (axios.isAxiosError(error)) {
         if (error.response) {
+          // Backend returned an error response
           const message =
             error.response.data?.message || error.response.data?.error;
           setLoginError(message || "Invalid Credentials");
+          toast.error(message || "Invalid Credentials");
         } else if (error.request) {
+          // Request made but no response received
           setLoginError(
             "Unable to connect to server. Please check your internet connection.",
           );
+          toast.error("Unable to connect to server.");
         } else {
+          // Error setting up the request
           setLoginError("An unexpected error occurred. Please try again.");
+          toast.error("An unexpected error occurred.");
         }
       } else {
-        setLoginError(
+        // Non-Axios error
+        const errorMessage =
           error instanceof Error
             ? error.message
-            : "An unexpected error occurred",
-        );
+            : "An unexpected error occurred";
+        setLoginError(errorMessage);
+        toast.error(errorMessage);
       }
     } finally {
       setIsLoading(false);
