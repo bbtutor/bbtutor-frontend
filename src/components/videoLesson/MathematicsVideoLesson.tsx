@@ -2,7 +2,7 @@
 import Title from "../ui/title";
 import Paragraph from "../ui/paragraph";
 import useSWR from "swr";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Loader from "../ui/loader";
 import ErrorMessage from "../ui/errorMessage";
 import getEmbedUrl from "@/hooks/getEmbedUrl";
@@ -10,9 +10,10 @@ import BuyLessonPopUp from "./BuyLessonPopUp";
 import DeleteConfirmDialog from "./DeleteConfirmDialog";
 import { useUserStore } from "@/store/useUserStore";
 import axiosClient from "@/lib/AxiosClientInstance";
-import { Settings, Trash2 } from "lucide-react";
+import { Settings, Edit, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import axios from "axios";
+import UpdateLesson from "./UpdateLesson";
 
 // TypeScript interfaces for type safety
 interface Instructor {
@@ -60,6 +61,30 @@ function MathematicsVideoLesson() {
     isOpen: boolean;
     lesson: Lesson | null;
   }>({ isOpen: false, lesson: null });
+
+  // State for update lesson popup
+  const [updateDialog, setUpdateDialog] = useState<{
+    isOpen: boolean;
+    lesson: Lesson | null;
+  }>({ isOpen: false, lesson: null });
+
+  // Add click outside handler to close all dropdowns
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      // Close all dropdowns when clicking outside
+      const dropdowns = document.querySelectorAll('[id^="dropdown-"]');
+      dropdowns.forEach((dropdown) => {
+        if (!dropdown.contains(event.target as Node)) {
+          dropdown.classList.add("hidden");
+        }
+      });
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   // State for pagination
   const [currentPage, setCurrentPage] = useState(1);
@@ -184,12 +209,28 @@ function MathematicsVideoLesson() {
                 <Settings className="h-4 w-4 text-gray-600" />
               </button>
 
-              {/* Dropdown Menu with Delete option only */}
+              {/* Dropdown Menu with Update and Delete options */}
               <div
                 id={`dropdown-${lesson._id}`}
                 className="hidden absolute right-0 mt-1 w-32 bg-white border border-gray-200 rounded-md shadow-lg z-10"
               >
                 <div className="py-1">
+                  {/* Update Button */}
+                  <button
+                    onClick={() => {
+                      // Open update popup
+                      setUpdateDialog({ isOpen: true, lesson });
+                      // Close dropdown after action
+                      document
+                        .getElementById(`dropdown-${lesson._id}`)
+                        ?.classList.add("hidden");
+                    }}
+                    className="flex items-center w-full px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
+                  >
+                    <Edit className="h-3 w-3 mr-2" />
+                    Update
+                  </button>
+
                   {/* Delete Button */}
                   <button
                     onClick={() => {
@@ -317,6 +358,18 @@ function MathematicsVideoLesson() {
         lessonTitle={deleteDialog.lesson?.title || ""}
         isLoading={false}
       />
+
+      {/* Update Lesson Popup */}
+      {updateDialog.isOpen && updateDialog.lesson && (
+        <UpdateLesson
+          lesson={updateDialog.lesson}
+          onClose={() => setUpdateDialog({ isOpen: false, lesson: null })}
+          onUpdateSuccess={() => {
+            // Refresh the lessons list after successful update
+            mutate();
+          }}
+        />
+      )}
     </section>
   );
 }

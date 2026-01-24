@@ -5,7 +5,7 @@ export function proxy(request: NextRequest) {
   const accessToken = request.cookies.get("accessToken");
   const { pathname } = request.nextUrl;
 
-  const protectedRoutes = ["/createLesson"];
+  const protectedRoutes = ["/createLesson", "/updateLesson"];
   const authRoutes = ["/login", "/register"];
 
   const isProtectedRoute = protectedRoutes.some((route) =>

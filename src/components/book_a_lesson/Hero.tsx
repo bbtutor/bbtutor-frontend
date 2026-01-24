@@ -18,7 +18,21 @@ function BookAHeroHero() {
       />
 
       <div className="mt-12 sm:mt-16 md:mt-20 flex flex-col md:flex-row items-stretch justify-center gap-6 md:gap-8 lg:gap-16 text-black">
-        <aside className="bg-[#E4F3FF] p-6 sm:p-8 gap-4 rounded-[10px] flex flex-col items-center flex-1 md:max-w-md justify-center">
+        <aside
+          onClick={() => {
+            const scrollDistance =
+              window.innerWidth < 768
+                ? 650
+                : window.innerWidth < 1024
+                  ? 500
+                  : 500;
+            window.scrollTo({
+              top: window.scrollY + scrollDistance,
+              behavior: "smooth",
+            });
+          }}
+          className="bg-[#E4F3FF] p-6 sm:p-8 gap-4 rounded-[10px] flex flex-col items-center flex-1 md:max-w-md justify-center cursor-pointer"
+        >
           <div className="w-7.5 h-7.5 rounded-full flex items-center justify-center">
             <Image
               src={"/img/emailIcon.png"}
