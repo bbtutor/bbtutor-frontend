@@ -261,7 +261,7 @@ function MathematicsVideoLesson() {
         <div className="rounded-md flex items-center justify-between py-1.75 px-4 bg-[#CCE0F0]">
           <p className="text-xs font-light">Lesson Fee</p>
           <p className="bg-[#D0AA12] text-primary rounded-xl py-1.5 px-3 font-bold">
-            {lesson.price}
+            ₦{lesson.price.toLocaleString()}
           </p>
         </div>
 
