@@ -278,14 +278,20 @@ This email was sent from the BB Tutors booking form.
                     <SelectValue placeholder="Select education level" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="high-school">High School</SelectItem>
-                    <SelectItem value="associate">Associate Degree</SelectItem>
-                    <SelectItem value="bachelor">
-                      Bachelor&apos;s Degree
+                    <SelectItem value="Nursery-School">
+                      Nursery School
                     </SelectItem>
-                    <SelectItem value="master">Master&apos;s Degree</SelectItem>
-                    <SelectItem value="doctorate">Doctorate/PhD</SelectItem>
-                    <SelectItem value="other">Other</SelectItem>
+                    <SelectItem value="Primary-School">
+                      Primary School
+                    </SelectItem>
+                    <SelectItem value="Secondary-School">
+                      Secondary School
+                    </SelectItem>
+                    <SelectItem value="Elementary-School">
+                      Elementary School
+                    </SelectItem>
+                    <SelectItem value="Middle-School">Middle School</SelectItem>
+                    <SelectItem value="High-School">High School</SelectItem>
                   </SelectContent>
                 </Select>
               )}
