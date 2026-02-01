@@ -15,11 +15,13 @@ import { Button } from "../ui/button";
 interface BuyLessonPopUpProps {
   lessonTitle: string;
   paymentLink: string;
+  lessonPrice?: number;
 }
 
 export default function BuyLessonPopUp({
   lessonTitle,
   paymentLink,
+  lessonPrice,
 }: BuyLessonPopUpProps) {
   const handlePayWithBudPay = () => {
     // pass lesson.paymentlink to budpay
@@ -27,10 +29,11 @@ export default function BuyLessonPopUp({
   };
 
   const handleContinueToReceipt = () => {
-    window.open(
-      `/submit_receipt?lessonTitle=${encodeURIComponent(lessonTitle)}`,
-      "_blank",
-    );
+    const receiptUrl = lessonPrice
+      ? `/submit_receipt?lessonTitle=${encodeURIComponent(lessonTitle)}&lesson.amount=${lessonPrice}`
+      : `/submit_receipt?lessonTitle=${encodeURIComponent(lessonTitle)}`;
+
+    window.open(receiptUrl, "_blank");
   };
 
   return (

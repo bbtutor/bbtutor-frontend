@@ -286,6 +286,7 @@ function MathematicsVideoLesson() {
         <BuyLessonPopUp
           lessonTitle={lesson.title}
           paymentLink={lesson.paymentLink}
+          lessonPrice={lesson.price}
         />
       </div>
     );

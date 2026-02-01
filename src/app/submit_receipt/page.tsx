@@ -27,7 +27,8 @@ function SubmitReceiptContent() {
     "",
   );
   const lessonTitle = searchParams.get("lessonTitle") || "a lesson";
-  const lessonPrice = searchParams.get("lessonPrice") || "0";
+  const lessonPrice =
+    searchParams.get("lesson.amount") || searchParams.get("lessonPrice") || "0";
 
   const handleReceiptSubmission = async () => {
     // Track receipt submission with Meta Pixel
