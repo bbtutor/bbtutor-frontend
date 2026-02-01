@@ -19,15 +19,21 @@ function JoinSocialMedia() {
         {showSocialButtons && (
           <button
             onClick={() => {
+              // Generate unique event ID for deduplication
+              const eventId = `lead_whatsapp_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+
               // Track WhatsApp button click with Meta Pixel
               if (typeof window !== "undefined" && window.fbq) {
                 window.fbq("track", "Lead", {
                   content_name: "WhatsApp Group Join",
                   content_category: "Social Media",
+                  event_id: eventId, // Unique deduplication key
                 });
               }
+
+              // Open WhatsApp
               window.open(
-                "https://chat.whatsapp.com/BlaqO3WNrvI2XBa8yvwW4R",
+                "https://chat.whatsapp.com/LJqF3E4M1hR1lQ8r5K9h0N",
                 "_blank",
               );
             }}
@@ -49,13 +55,18 @@ function JoinSocialMedia() {
         {showSocialButtons && (
           <button
             onClick={() => {
+              // Generate unique event ID for deduplication
+              const eventId = `lead_telegram_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+
               // Track Telegram button click with Meta Pixel
               if (typeof window !== "undefined" && window.fbq) {
                 window.fbq("track", "Lead", {
                   content_name: "Telegram Group Join",
                   content_category: "Social Media",
+                  event_id: eventId, // Unique deduplication key
                 });
               }
+
               window.open("https://t.me/bbtutors", "_blank");
             }}
             className="rounded-4xl border border-primary p-1.5 sm:p-2 lg:p-2.5 flex gap-1 sm:gap-1.5 lg:gap-2 items-center justify-center w-full max-w-60 sm:max-w-70 lg:max-w-[320px] bg-white cursor-pointer"

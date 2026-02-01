@@ -31,6 +31,9 @@ function SubmitReceiptContent() {
     searchParams.get("lesson.amount") || searchParams.get("lessonPrice") || "0";
 
   const handleReceiptSubmission = async () => {
+    // Generate unique event ID for deduplication
+    const eventId = `purchase_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+
     // Track receipt submission with Meta Pixel
     if (typeof window !== "undefined" && window.fbq) {
       window.fbq("track", "Purchase", {
@@ -38,11 +41,18 @@ function SubmitReceiptContent() {
         content_category: "Payment Confirmation",
         currency: "NGN",
         value: parseFloat(lessonPrice) || 0, // Use lesson price or fallback to 0
+        event_id: eventId, // Unique deduplication key
       });
     }
 
-    // Show thank you toast
-    toast.success("Thank you for your purchase!");
+    // Show thank you toast with white background
+    toast.success("Thank you for your purchase!", {
+      style: {
+        backgroundColor: "white",
+        color: "black",
+        border: "1px solid #e5e7eb",
+      },
+    });
 
     // Wait 2 seconds before opening email or WhatsApp
     await new Promise((resolve) => setTimeout(resolve, 2000));
