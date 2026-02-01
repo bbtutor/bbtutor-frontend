@@ -3,6 +3,13 @@ import { CircleAlert } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 
+// TypeScript declaration for Facebook Pixel
+declare global {
+  interface Window {
+    fbq?: (command: string, eventName: string, parameters?: object) => void;
+  }
+}
+
 function JoinSocialMedia() {
   // Floating button on the left for the social media groups
   const [showSocialButtons, setShowSocialButtons] = useState(false);
@@ -11,12 +18,19 @@ function JoinSocialMedia() {
       <div className="flex flex-col gap-2 sm:gap-3 lg:gap-4">
         {showSocialButtons && (
           <button
-            onClick={() =>
+            onClick={() => {
+              // Track WhatsApp button click with Meta Pixel
+              if (typeof window !== "undefined" && window.fbq) {
+                window.fbq("track", "Lead", {
+                  content_name: "WhatsApp Group Join",
+                  content_category: "Social Media",
+                });
+              }
               window.open(
                 "https://chat.whatsapp.com/BlaqO3WNrvI2XBa8yvwW4R",
                 "_blank",
-              )
-            }
+              );
+            }}
             className="rounded-4xl border border-primary p-1.5 sm:p-2 lg:p-2.5 flex gap-1 sm:gap-1.5 lg:gap-2 items-center justify-center w-full max-w-60 sm:max-w-70 lg:max-w-[320px] bg-white cursor-pointer"
           >
             <Image
@@ -34,7 +48,16 @@ function JoinSocialMedia() {
 
         {showSocialButtons && (
           <button
-            onClick={() => window.open("https://t.me/bbtutors", "_blank")}
+            onClick={() => {
+              // Track Telegram button click with Meta Pixel
+              if (typeof window !== "undefined" && window.fbq) {
+                window.fbq("track", "Lead", {
+                  content_name: "Telegram Group Join",
+                  content_category: "Social Media",
+                });
+              }
+              window.open("https://t.me/bbtutors", "_blank");
+            }}
             className="rounded-4xl border border-primary p-1.5 sm:p-2 lg:p-2.5 flex gap-1 sm:gap-1.5 lg:gap-2 items-center justify-center w-full max-w-60 sm:max-w-70 lg:max-w-[320px] bg-white cursor-pointer"
           >
             <Image
