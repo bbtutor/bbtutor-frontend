@@ -27,7 +27,7 @@ function JoinSocialMedia() {
                 window.fbq("track", "Lead", {
                   content_name: "WhatsApp Group Join",
                   content_category: "Social Media",
-                  event_id: eventId, // Unique deduplication key
+                  eventID: eventId, // Unique deduplication key
                 });
               }
 
@@ -63,7 +63,7 @@ function JoinSocialMedia() {
                 window.fbq("track", "Lead", {
                   content_name: "Telegram Group Join",
                   content_category: "Social Media",
-                  event_id: eventId, // Unique deduplication key
+                  eventID: eventId, // Unique deduplication key
                 });
               }
 

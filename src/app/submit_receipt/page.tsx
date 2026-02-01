@@ -41,7 +41,7 @@ function SubmitReceiptContent() {
         content_category: "Payment Confirmation",
         currency: "NGN",
         value: parseFloat(lessonPrice) || 0, // Use lesson price or fallback to 0
-        event_id: eventId, // Unique deduplication key
+        eventID: eventId, // Unique deduplication key
       });
     }
 
