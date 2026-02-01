@@ -1,6 +1,7 @@
 "use client";
-import { useState } from "react";
+import { useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
+import { toast } from "sonner";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -20,23 +21,30 @@ declare global {
   }
 }
 
-export default function SubmitReceiptPage() {
+function SubmitReceiptContent() {
   const searchParams = useSearchParams();
   const [receiptMethod, setReceiptMethod] = useState<"email" | "whatsapp" | "">(
     "",
   );
   const lessonTitle = searchParams.get("lessonTitle") || "a lesson";
+  const lessonPrice = searchParams.get("lessonPrice") || "0";
 
-  const handleReceiptSubmission = () => {
+  const handleReceiptSubmission = async () => {
     // Track receipt submission with Meta Pixel
     if (typeof window !== "undefined" && window.fbq) {
       window.fbq("track", "Purchase", {
         content_name: `Succesful Purchase of - ${lessonTitle}`,
         content_category: "Payment Confirmation",
         currency: "NGN",
-        value: 0, // Value can be updated if you have the actual amount
+        value: parseFloat(lessonPrice) || 0, // Use lesson price or fallback to 0
       });
     }
+
+    // Show thank you toast
+    toast.success("Thank you for your purchase!");
+
+    // Wait 2 seconds before opening email or WhatsApp
+    await new Promise((resolve) => setTimeout(resolve, 2000));
 
     const message = `Hello BB Tutors, \n I have completed payment for ${lessonTitle}. Please find my receipt attached for confirmation. Thank you!`;
     const encodedMessage = encodeURIComponent(message);
@@ -151,5 +159,13 @@ export default function SubmitReceiptPage() {
         </AlertDialogContent>
       </AlertDialog>
     </div>
+  );
+}
+
+export default function SubmitReceiptPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <SubmitReceiptContent />
+    </Suspense>
   );
 }
