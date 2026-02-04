@@ -33,7 +33,7 @@ function JoinSocialMedia() {
 
               // Open WhatsApp
               window.open(
-                "https://chat.whatsapp.com/LJqF3E4M1hR1lQ8r5K9h0N",
+                "https://chat.whatsapp.com/BlaqO3WNrvI2XBa8yvwW4R",
                 "_blank",
               );
             }}
